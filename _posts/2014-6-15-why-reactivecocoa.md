@@ -2,10 +2,8 @@
 layout: post
 title: Why Reactive(Cocoa)?
 ---
-Reason about our code
-Multiple entry points all over the file (hard to reason about)
 
-I had very little understanding of what the benefits might be when I began to learn ReactiveCocoa (RAC); but I love learning new hip things and RAC came with buzzwords! It turned out to be far more than a utility class, in fact facilitating a very different programming paradigm. What I hope to do here is provide some insight on what I've learned, and why you should at least investigate the Reactive style of programming. (There has been some fuss recently over the exact terms used to describe the "style" of programming found in ReactiveCocoa, but I still think Reactive is a pretty good term myself so I'm not going to shy away from it yet.)
+I had very little understanding of what the benefits might be when I began to learn ReactiveCocoa (RAC); but I love learning new hip things and RAC came with buzzwords! I soon discovered that RAC was far more than a utility class. Instead, it is a framework that facilitates a different programming paradigm. What I hope to do here is provide some insight on what I've learned, and why you should at least investigate the reactive style of programming. (There has been some fuss recently over the exact terms used to describe the "style" of programming found in ReactiveCocoa, but I still think "Reactive" is a pretty good term myself so I'm not going to shy away from it yet.)
 
 To start you should probably go read the article ["Inputs and Outputs"](http://blog.maybeapps.com/post/42894317939/input-and-output) by [Josh Aber](https://twitter.com/joshaber). It's an **extremely** well written article that I can only hope to supplement with a slightly different explanation. (I'll be rehashing a bit of what he's covered there.)
 
@@ -25,7 +23,7 @@ The problem is that we rarely (read: never) are updating our output based on *ju
 I will add one huge point pertinent to this article. We *often* don't really care what orders these inputs came in from an application design perspective, but from an implementation perspective it's something we are constantly dealing with.
 
 ## Paper Tape Computing (Linear Programming)
-The issue here is one of **time**, or more accurately, the timeline of execution. Basically, we program in linear fashion, never wandering all that far from the way things were done on [paper tape computers](https://www.youtube.com/watch?v=uqyVgrplrno) or punch cards. We have an understanding that there is a run loop, and that our code is going to be placed on a timeline and executed in order (ignoring multiple processes for the sake of argument.) Even our awesome block callbacks and delegates are just giving us another snippet of time on the timeline where we can execute code. In fact all our code is driven by inputs (events) just giving us another chance to insert some paper tape, as shown in this beautiful (and super simplified) diagram.
+The issue here is one of **time**, or more accurately, the timeline of execution. Basically, we program in linear fashion, never wandering all that far from the way things were done on [paper tape computers](https://www.youtube.com/watch?v=uqyVgrplrno) or punch cards. We have an understanding that there is a run loop, and that our code is going to be placed on a timeline and executed in order (ignoring multiple processes for the sake of argument.) Even our awesome block callbacks and delegates are just giving us another snippet of time on the timeline where we can execute code. In fact, all our code is driven by inputs (events) just giving us another chance to insert some paper tape, as shown in this beautiful (and super simplified) diagram.
 
 ![Taking turns on the paper tape computer][code-timeline]
 
@@ -102,75 +100,7 @@ So how does ReactiveCocoa abstract away the timeline for us and step into the wo
 
 Here's an example of the typical pattern of combining various inputs into one output. At a high level, we have a menu that shows when the user taps a button, but there are a bunch of conditions that must be met before that view can be shown:
 
-{% highlight objective-c %}
-// a central function that checks all our states and generates the appropriate output
-- (void) checkAndUpdateMenuStatus {
-    if (self.menuShouldBeShowing && !self.isMenuShowing 
-        && self.menuDataIsLoaded && self.userIsLoggedIn) {
-        [self showMenu];
-    } else if (!self.menuShouldBeShowing && self.isMenuShowing) {
-        [self hideMenu];
-    }
-}
-// sets initial states and sets up our notification observation
-- (void) viewDidLoad {
-    // Set initial states
-    // Let's assume you can't get to this page without being logged in
-    self.userIsLoggedIn = YES;
-    self.isMenuShowing = NO;
-    self.menuDataIsLoaded = NO;
-    self.menuShouldBeShowing = NO;
-    // Need to handle in case the user logs out while on this page
-    [[NSNotificationCenter defaultCenter] addObserverForName:kUserLoggedOutNotification 
-                                                      object:nil 
-                                                       queue:nil 
-                                                  usingBlock:^(NSNotification *note) {
-        self.userIsLoggedIn = NO;
-        [self checkAndUpdateMenuStatus];
-    }];
-    // set the initial state (somewhat unnecessary since our menu starts hidden
-    // but a good safety check)
-    [self checkAndUpdateMenuStatus];
-}
-// Loads the menu data from the network
-- (void) loadMenuData {
-    [TCPAPI fetchUserMenuData onComplete:^(NSArray *objects, NSError *error) {
-        if(!error) {
-            [self hideLoadingView];
-        } else {
-            self.menuDataIsLoaded = YES;
-            [self checkAndUpdateMenuStatus];
-        }
-    }];
-}
-// handles showing and hiding a loading view
-- (void) startLoadingView {
-    if(self.isLoadingShowing) return;
-    self.isLoadingShowing = YES;
-    // do work to show loading view
-}
-- (void) hideLoadingView {
-    if(!self.isLoadingShowing) return;
-    self.isLoadingShowing = NO;
-    // do work to hide loading view
-}
-- (void) showMenu {
-    // show menu
-    self.isMenuShowing = YES;
-}
-- (void) hideMenu {
-    // hide menu
-    self.isMenuShowing = NO;
-}
-- (IBAction) userTappedMenuButton:(UIButton *menuButton) {
-    // kick off loading of our menu data lazily if it isn't loaded yet
-    if(!self.menuDataIsLoaded) {
-        [self loadMenuData];
-    }
-    self.menuShouldBeShowing = !self.menuShouldBeShowing;
-    [self checkAndUpdateMenuStatus];
-}
-{% endhighlight %}
+{% gist sprynmr/876844b9f94530205951 %}
 
 In this example, we're doing all kinds of direct work with state so that we can combine all the events that have happened in our execution timeline and update our output properly. Our code to manage our state and to update our output is *ALL* over the place. Even for a simple example in a short file such as this, it's very hard to keep straight the potential combinations and order of inputs that affect the showing of the menu.
 
@@ -178,62 +108,10 @@ At least we've centralized the state checking and updating of the output to a si
 
 Here is how we might do this in RAC. Don't worry about the specifics of how exactly all these bits are working. I'll cover that in another post:
 
-{% highlight objective-c %}
-- (void) viewDidLoad {
-    [super viewDidLoad];
-    
-    // RACCommand is a special object that returns a signal, provides an additional `executing` signal until it completes, and allows for 
-    // multiple subscriptions to the returned signal without triggering multiple side effects (API call is only made once)
-    self.fetchUserMenuDataCommand = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
-            // this API returns a RACSignal
-            return [TCAPI fetchUserMenuData];
-        }];
+{% gist sprynmr/63a86ef44a25ee1e10e2 %}
+---
+**Footnotes**
 
-    // Every time the command is executed it returns a new signal
-    // the `switchToLatest` operator gives us the most recent signal, which is all we care about
-    // We bind the result of that signal to our property (derive state instead of manually setting it)
-    // This IS state, but it's necessary, derived state that we aren't managing manually
-    RAC(self, menuData) = [self.fetchUserMenuDataCommand.executionSignals switchToLatest];
-
-    // A signal that sends a value if the user logs out
-    // starts with an initial value of @YES (the user starts logged in)
-    RACSignal *userIsLoggedIn = [[[[NSNotificationCenter defaultCenter] rac_addObserverForName:kUserLoggedOutNotification object:nil]
-        mapReplace:@NO]
-        startWith: @YES];
-
-    @weakify(self);
-    RACCommand *menuButtonPressed = [[RACCommand alloc] initWithEnabled:userIsLoggedIn signalBlock:^RACSignal *(id input) {
-            @strongify(self);
-            // We already have implicit state `hidden` on the menu we don't have to manage
-            if (self.menuView.hidden) {
-                if (self.menuData != nil) {
-                    return [RACSignal return: @YES];
-                }
-                return [[self.fetchUserMenuDataCommand execute:nil]
-                    mapReplace:@YES];
-            } else {
-                return @NO;
-            }
-        }];
-
-    // Use `switchToLatest` to make sure we're listening to the most recent signal
-    // This signal will send values either @YES or @NO from the command that we'll use to
-    RACSignal *menuButtonSignal = [menuButtonPressed.executionSignals switchToLatest];
-
-    // We also want to hide the menu if the user logs out while it's showing
-    // So we merge in the values from the `userIsLoggedIn` signal and ignore @YES
-    // We'll use this combined signal to fire the `showMenu` selector below
-    RACSignal *showHideMenuSignal = [RACSignal merge:@[[menuButtonSignal], [userIsLoggedIn ignore:@YES]]];
-
-    // Automatically fires the selector with the value by the signal the menuButtonPressed command returns
-    // `showMenu` implementation left out, but it takes a BOOL and will either show or hide a view
-    [self rac_liftSelector:@selector(showMenu:) withSignals: showHideMenuSignal];
-
-    // We also automatically call the `showLoading` selector when our network command is still executing (before it's signal returns it's value)
-    // `showLoading` implementation left out, but it takes a BOOL and will either show or hide a loading view
-    [self rac_liftSelector:@selector(showLoading:) withSignals: self.fetchUserMenuDataCommand.executing];
-}
-{% endhighlight %}
 
 [^1]: 
     Technically in nested inputs such as the two API calls here, the child would have access to the parent event data via a closure. This is a little helpful for outputs that have only a dependency on their ancestors, but not a very robust solution (Ugh):

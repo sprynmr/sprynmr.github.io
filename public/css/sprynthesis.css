@@ -1,0 +1,16 @@
+/*
+ * Container
+ *
+ * Center the page content.
+ */
+
+.container {
+  max-width: 56rem;
+}
+
+@media (min-width: 30em) {
+    .container {
+        padding-left:  2rem;
+        padding-right: 2rem;
+    }
+}

@@ -1,22 +1,22 @@
 # Dependencies
-markdown:         redcarpet
+markdown:         kramdown
 pygments:         true
 
 # Permalinks
 permalink:        pretty
 
 # Setup
-title:            Poole
-tagline:          The Jekyll Butler
-url:              http://getpoole.com
+title:            Sprynthesis
+tagline:          "Writings by Bob Spryn, an iOS Engineer"
+url:              http://www.sprynthesis.com
 paginate:         1
 baseurl:          /
 author:
-  name:           Mark Otto
-  url:            https://twitter.com/mdo
-  email:          markdotto@gmail.com
+  name:           Bob Spryn
+  url:            https://twitter.com/sprynmr
+  email:          bobspryn@gmail.com
 
 # Custom vars
 version:          1.0.0
 github:
-  repo:           https://github.com/poole/poole
+  repo:           https://github.com/sprynmr/sprynmr.github.io

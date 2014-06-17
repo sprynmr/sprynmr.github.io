@@ -31,13 +31,13 @@ I will add one point pertinent to this article. We *often* don't really care wha
 ## Paper Tape Computing (Linear Programming)
 The issue here is one of **time**, or more accurately, the timeline of execution. Basically, we program in linear fashion, never wandering all that far from the way things were done on [paper tape computers](https://www.youtube.com/watch?v=uqyVgrplrno) or punch cards. We have an understanding that there is a run loop, and that our code is going to be placed on a timeline and executed in order (ignoring multiple processes for the sake of argument.) Even our awesome block callbacks and delegates are just giving us another snippet of time on the timeline where we can execute code. In fact, all our code is driven by inputs (events) just giving us another chance to insert some paper tape, as shown in this beautiful (and super simplified) diagram.
 
-![Taking turns on the paper tape computer][code-timeline]
+[![Taking turns on the paper tape computer][code-timeline]](/assets/images/code-timeline.png)
 
 Our asynchronous callbacks and other events are still occurring in a linear fashion. The period of time in which the data from these events is available to us is limited to a small spot on our linear execution timeline (scope).[^nested] Even if all these events occurred at the same exact millisecond, the CPU would still have to handle one at a time. Our code is stuck executing in single file, with no knowledge of what happened before it.
 
 Whenever one of these events happens, we likely need to generate output. To do that, we need to combine the new information from this event with all the information from previous events relevant to this particular output. Our blocks and delegate calls may be asynchronous, but we still have to deal with the consequence of where they occured on our timeline.
 
-![Events over time][events]
+[![Events over time][events]](/assets/images/events.png)
 
 But how do we do that? The information from those previous events isn't available in the same scope as the current event we're dealing with.[^aside-from-nesting] There's no elegant mechanism provided for accessing past events, or combining the information from all the relevent events. Since these inputs are essentially isolated from each other in this linear style of programming, we have to imperatively (directly) go and check the status of any dynamic information that other inputs could have changed beforehand. That is to say any time there is an event (input), and we're given a chance to run some more paper tape, we do a lot of this type of thinking in code: 
 
@@ -60,13 +60,13 @@ That should have made you cringe. I'm SURE you've seen (and written) similar cod
 
 The problem here is that every time you add another state, you are increasing the possible number of combinations in an **EXPONENTIAL** manner. And that's assuming your states are just BOOLs. I had an "aha!" moment when I saw a slide in a talk by [Justin Spahr-Summers](http://twitter.comjspahrsummers).
 
-![State combinations increasing exponentially][state]
+[![State combinations increasing exponentially][state]](/assets/images/state.png)
 
 I looked at my code, like the interface above, and realized I was giving myself an unbelievably difficult task, requiring super-geek like abilities to pull off (to the tune of 4000+ different combinations I needed to handle if they were all relevant to the output). Obviously this is HIGHLY error prone.
 
 To make matters worse, this type of code will often produce UI only bugs that are incredibly hard, if not impossible, to identify in any automated way. After a few times through this wringer, we've probably all ended up writing centralized update methods that check a bunch of properties and update things accordingly. We end up with methods like this littered throughout our code: `updateViewCommentStatus` `updateChangeAnswerButtonText`. Any time we add another event (input), we make sure it's updating all the relevant states (e.g. properties) and call the appropriate centralized update methods.
 
-![State change timeline][state-change]
+[![State change timeline][state-change]](/assets/images/state-change.png)
 
 We are expending an awful lot of mental energy dealing with the consequences of this linear code execution thing, this modern version of the paper tape computer. Despite the power of computers today, we are still doing a heck of a lot of work on their behalf. We're programming to the way the computer hardware works; to the way that the run loop is creating a timeline and the cpu is processing bits in a single file. We are architecting our code around low level implementation details of computing. What if we were to harness the power of the computer, let it do more of the work, and allow ourselves to think and design our apps in a more sane manner?
 
@@ -82,18 +82,18 @@ We want to define the relationship between events (inputs), define their subsequ
 
 When you think about it, this concept is actually very simple, and not entirely foreign. Inputs and outputs [^simplified]:
 
-![A home-made 4-bit computer logic board with lights][logic-board]
+[![A home-made 4-bit computer logic board with lights][logic-board]](/assets/images/logic-board.jpg)
 [Source](http://www.waitingforfriday.com/index.php/4-Bit_Computer)
 
 ##ReactiveCocoa
 
-So how does ReactiveCocoa abstract away the timeline for us and step into the world of Non-Linear Programming? It does this by wrapping all those patterns of input from above in one unified interface called a Signal (`RACSignal`). 
+So how does ReactiveCocoa abstract away the timeline for us and step into the world of Non-Linear Programming? It does this by wrapping all those types of input from above (delegate, KVO, completion blocks, etc) in one unified interface called a Signal (`RACSignal`). 
 
 Think of a signal as a representation of future values from your input. It's similar to a promise/future which you may have used, but more robust in that it can continually send values (it isn't limited to just one). While this is similar to a KVO block repeatedly being executed as it observes changes, the difference here is that we now have an object representing those future values. We can take that representation and combine it with other signals to build relationships among our events, and describe how data will flow through our app. This is done with powerful operators that can transform and filter our data into new signals, eventually arriving at the data we need for our output.
 
 ###Example
 
-Here's a non-trivial example of the typical pattern of combining various inputs into one output imperatively. At a high level, we have a menu that shows when the user taps a button, but there are a bunch of conditions that must be met before that view can be shown:
+Here's a non-trivial example of the typical pattern of combining various inputs into one output imperatively (in non-RAC fashion). At a high level, we have a menu that is shown when the user taps a button, but there are a bunch of conditions that must be met before that view can be shown:
 
 {% gist sprynmr/876844b9f94530205951 %}
 
@@ -105,9 +105,12 @@ Here is how we might do this in RAC. Don't worry about the specifics of the synt
 
 {% gist sprynmr/63a86ef44a25ee1e10e2 %}
 
-This code will certainly look foreign if you are new to ReactiveCocoa. You should be able to pick up the idea of using a `RACSignal` to get representations of future data. `userIsLoggedIn` will send a `@YES` initially and then a `@NO` if the user logs out. `menuButtonSignal` will send a `@YES` if the menu should be shown or a `@NO` if it should be hidden. We merge those two signals together so we now have a stream of either `@YES`s or `@NO`s that we are using to trigger the `showMenu:` method. `showLoading` is also automatically triggered whenever it receives a `@YES` or `@NO` value from the `.executing` signal on our API command. `RACCommand`s are immensely useful, but also a little beyond the scope of this article, so don't worry about them too much.
+This code will certainly look foreign if you are new to ReactiveCocoa. You should be able to pick up on the idea of using a `RACSignal` to get representations of future data. `userIsLoggedInSignal` will send a `@YES` initially and then a `@NO` if the user logs out. `menuButtonSignal` will send a `@YES` if the menu should be shown or a `@NO` if it should be hidden. We merge those two signals together so we now have a stream of either `@YES`'s or `@NO`'s that we are using to trigger the `showMenu:` method. `showLoading` is also automatically triggered whenever it receives a `@YES` or `@NO` value from the `.executing` signal we can pull off our API command. `RACCommand`'s are immensely useful, but also a little beyond the scope of this article, so don't worry about them too much.
 
-Hopefully you can take away some of the beauty of describing the relationships of your inputs, the flow of data through your logic, and your outputs, all in one place. Even with a sizeable amount of comments, I still end up with less code[^lesscode]. I'm not worrying about the timeline of what event happens when (as much) or dealing with entry points all across my file. I can come back to this code in a couple months and quickly grok what is going on. It is a great deal easier to reason about my code.
+Hopefully you can take away some of the beauty of describing the relationships of your inputs, the flow of data through your logic, and your outputs, all in one place. Even with a sizeable amount of comments, I still end up with less code[^lesscode]. I'm not worrying about the timeline of what event happens when (as much), or dealing with entry points all across my file. I can come back to this code in a couple months and quickly grok what is going on. It is a great deal easier to reason about my code.
+
+Take a look without the comments:
+{% gist sprynmr/6ffad42a7a44296dd8f8 %}
 
 ---
 **Footnotes**

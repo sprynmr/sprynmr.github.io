@@ -19,6 +19,6 @@ author:
   email:          bobspryn@gmail.com
 
 # Custom vars
-version:          1.0.0
 github:
   repo:           https://github.com/sprynmr/sprynmr.github.io
+subtitle: "Writings by Bob Spryn, an iOS Engineer"

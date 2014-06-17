@@ -52,23 +52,7 @@ This is not the case. **Everyone sucks at managing state.** It is the source of 
 
 So what is state? Are we just talking about enums and state machines like `TCQuestionDetailViewControllerState`? Nope. This is all state:
 
-{% highlight objective-c %}
-@interface TCQuestionDetailViewController ()
-@property (nonatomic, strong) TCQuestion *question;
-// .. even more properties
-@property (nonatomic, assign) TCQuestionDetailViewControllerState state;
-@property (nonatomic, assign) BOOL didAnswerQuestion;
-@property (nonatomic, assign) BOOL questionFullyLoaded;
-@property (nonatomic, assign) BOOL inResultsView;
-@property (nonatomic, assign) BOOL isInModal;
-@property (nonatomic, assign) BOOL loadingNextPageOfComments;
-@property (nonatomic, assign) BOOL commentsAreShowing;
-@property (nonatomic, assign) BOOL commentsLoadingShowing;
-@property (nonatomic, assign) BOOL flippingAnswers;
-@property (nonatomic, assign) BOOL isOwnerOfQuestion;
-@property (nonatomic, assign) BOOL keyboardShowing;
-@end
-{% endhighlight %}
+{% gist sprynmr/f735592531f54848f889 %}
 
 That should have made you cringe. I'm SURE you've seen (and written) similar code. If not you are a WAY better programmer than I am. UI's are often very complex in code even when they appear simple to the user. In fact, the very reason a user may LOVE your app is the amount of power it delivers in an extremely simple interface.
 
@@ -136,7 +120,7 @@ Hopefully you can take away some of the beauty of describing the relationships o
 [^aside-from-nesting]: Aside from nesting. See [^nested]
 [^goldfish]: Unfortunately for this analogy, goldfish can actually remember up to several months. Even three seconds of memory sort of defeats the point. More like a goldfish missing the part of it's brain responsible for memory. [Reference](http://www.dailymail.co.uk/sciencetech/article-1106884/Three-second-memory-myth-Fish-remember-months.html)
 [^simplified]: This is intentionally simplified, and doesn't really worry about the reality of side effects required in the real world of iOS/Mac Development
-[^wwdcvid]: As I was almost finished with this article, I watched the 2014 WWDC session ["Advanced iOS Application Architecture and Patterns"](http://devstreaming.apple.com/videos/wwdc/2014/229xx77tq0pmkwo/229/229_hd_advanced_ios_architecture_and_patterns.mov?dl=1) by [Andy Matuschak] (http://www.twitter.com/andy_matuschak). It's a great session, and highly relevant to the topic at hand. In fact the whole initial segment of the talk where he talks about the importance of being able to "reason about our code" could just as easily be a segment about "Why ReactiveCocoa".
+[^wwdcvid]: As I was almost finished with this article, I watched the 2014 WWDC session ["Advanced iOS Application Architecture and Patterns"](http://devstreaming.apple.com/videos/wwdc/2014/229xx77tq0pmkwo/229/229_hd_advanced_ios_architecture_and_patterns.mov?dl=1) by [Andy Matuschak](http://www.twitter.com/andy_matuschak). It's a great session, and highly relevant to the topic at hand. In fact the whole initial segment of the talk where he talks about the importance of being able to "reason about our code" could just as easily be a segment about "Why ReactiveCocoa".
 [^lesscode]: This isn't always the case. But even if you end up with a little more code, it usually means substantially more clarity.
 
 [code-timeline]: /assets/images/code-timeline.png "Taking turns on the paper tape computer"

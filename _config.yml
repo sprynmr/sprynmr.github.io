@@ -7,7 +7,7 @@ permalink:        pretty
 
 # Setup
 title:            Sprynthesis
-tagline:          "Writings by Bob Spryn, an iOS Engineer"
+tagline:          "Writings by <a href='http://twitter.com/sprynmr'>Bob Spryn</a>, an iOS Engineer at <a href='http://www.lohilabs.com'>Lohi Labs</a> and <a href='http://www.threecentsapp.com'>Three Cents</a>"
 url:              http://www.sprynthesis.com/
 port:             4000
 paginate:         1

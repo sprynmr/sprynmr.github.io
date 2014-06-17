@@ -1,9 +1,3 @@
-/*
- * Container
- *
- * Center the page content.
- */
-
 .container {
   max-width: 56rem;
 }
@@ -13,4 +7,8 @@
         padding-left:  2rem;
         padding-right: 2rem;
     }
+}
+
+.masthead {
+  margin-bottom: 2rem;
 }

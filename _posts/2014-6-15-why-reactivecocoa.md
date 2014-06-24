@@ -58,7 +58,7 @@ That should have made you cringe. I'm SURE you've seen (and written) similar cod
 
 > Value is created by swallowing complexity for the user.  *- CEO of my first startup*
 
-The problem here is that every time you add another state, you are increasing the possible number of combinations in an **EXPONENTIAL** manner. And that's assuming your states are just BOOLs. I had an "aha!" moment when I saw a slide in a talk by [Justin Spahr-Summers](http://twitter.comjspahrsummers).
+The problem here is that every time you add another state, you are increasing the possible number of combinations in an **EXPONENTIAL** manner. And that's assuming your states are just BOOLs. I had an "aha!" moment when I saw a slide in a talk by [Justin Spahr-Summers](http://twitter.com/jspahrsummers).
 
 [![State combinations increasing exponentially][state]](/assets/images/state.png)
 

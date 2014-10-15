@@ -1,7 +1,7 @@
 ---
 layout: post
 title: ReactiveCocoa and MVVM, an Introduction
-tags: ReactiveCocoa
+tags: ReactiveCocoa, View-Model
 ---
 
 ##MVC

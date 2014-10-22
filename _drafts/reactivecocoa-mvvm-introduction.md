@@ -23,7 +23,7 @@ In that spirit I want to address the question: **Is it unwise to use an applicat
 
 I'm not going to cover the history of MVC/MVVM as it's been covered elsewhere, and I'm not that well versed on it. I'm going to focus on how we can use it in iOS/Mac development.
 
-##Defining MVVM
+###Defining MVVM
 
 1. **Model** The model doesn't really change in MVVM. Depending on what you preference is, your models may or may not encapsulate some additional business logic responsibilities. I tend to use it more as a construct with which to hold information representing a data-model object, and keep any consolidated logic for managing/manipulating models in a separate manager type class.
 2. **View** - The view encompasses the actual UI itself (whether that means `UIView` code, storyboards, or xibs), any view specific logic, and reaction to user input. This includes a lot of the responsibilities handled by the `UIViewController` in iOS, not just `UIView` code and files.
@@ -71,7 +71,7 @@ Let's look at a simple view-model header to get a better idea of what our new co
 - Allow for infinite scrolling
 
 
-**--Quick diagram of the twitter app goes here--**
+![Tweetboat Plus App](assets/images/tweeboatplus.png)
 
 The header of our view-model might look like this:
 
@@ -120,7 +120,7 @@ In our example, the `tweets` array will be full of child view-models that might 
 
 {% gist sprynmr/adfd5eb3775a225a2011 %}
 
-##Mom, where do view-models come from?
+###Mom, where do view-models come from?
 
 So when and where are view-models created? Do view controllers create their own view-models?
 
@@ -138,29 +138,44 @@ and use it like this:
 
 In the case of our tweet cells, I would typically create all the view-models for the corresponding cells ahead of time when the data driving the screen (probably via a web service call in this case) was gathered. So in our scenario, `tweets` on the main view-model would be an array of `MYTweetCellViewModel` objects. So in `cellForRowAtIndexPath` on my table view, I would simply grab the view-model at the correct index, and assign it to the view-model property on my cell.
 
-### Functional Core Imperative Shell
+## Functional Core, Imperative Shell
 
-- Reference Andy's talk (thin object layer big value layer)
-- Find source of that phrase and link to it.
-- Short explanation of functional programming and how separating our data out into a view-model makes it testable (data in, data out) and less imperative (not triggering UIKit side effects)
+This view-model approach to application design is a stepping stone on the path to a type of application design coined ["Functional Core, Imperative Shell"](https://www.destroyallsoftware.com/screencasts/catalog/functional-core-imperative-shell).[^andy]
+
+### Functional Core
+
+The view-model is the ["functional core"](http://www.smashingmagazine.com/2014/07/02/dont-be-scared-of-functional-programming/), though pragmatically in iOS/Objective-C it's tricky to get to the purely functional level. The general idea is to make your view-models have as little dependence and impact on the rest of the "application world" as possible. What does that mean? Think of simple functions you probably learned when first studying programming. They accepted maybe one or two parameters, and output a result value. **Data in, data out.** No matter what else was going on in the application, the same input would create the same output. 
+
+That's what we are striving for with view-models. They contain the logic and functionality for transforming data and storing it's output in properties. Ideally the same input (e.g. web service response) will derive the same output (property values). This means eliminating as many factors as possible by which the rest of the "application world" might affect the output, [such as using a lot of state](http://www.sprynthesis.com/2014/06/15/why-reactivecocoa/). **A great first step would be not including UIKit.h in your view-model header.**[^uikit-header] UIKit is, by it's nature, going to affect a lot of the application world. It contains many "side-effects", whereby changing one value or calling one method will trigger many indirect (even unknowable) changes.
+
+### Imperative (Declarative?) Shell
+
+The imperative shell is where we do all the state-changing, application-world-altering dirty work needed to turn our view-model data into something for the user on the screen. I would still make it a point to eliminate as much state as possible and do this work in a declarative nature using something like ReactiveCocoa, but we are still operating in an imperative world with iOS and UIKit.
+
+### Testable Core
+
+The biggest advantage of this functional core(ish) view-model, aside from the number of bugs eliminated everytime you reduce state, is that it becomes extremely unit testable. If you have methods that should generate the same output everytime they are supplied the same input, that fits extremely well into the world of unit tests. We now have our data gathering/logic/transforming extracted away from the complexities of a view controller. That means no crazy mock objects, method swizzling, or other insane workarounds (hopefully) are required to build really good tests.
 
 ##Reactive Cocoa
 
 **So how do we update our view controller when these public properties on the view model change?**
 
-- Simple explanation of RAC
+- Simple explanation of RAC with diagrams
     - RACSignal
         - Primary building block of RAC
         - Sends a stream of values to it's subscribers
         - You can transform, split, and combine those values into something more meaningful, building context.
         - Example of values we would receive
         - Show multiple subscribers
-        - Show transformation (and side effects happening multiple times)
+        - Show transformation (and side effects happening multiple times?)
         - Where do the values come from?
             - Show `createSignal` for something like an API call
-            - Show RACObserve and RAC()
+            - Show RACObserve
+        - What's a subscriber
+            - Show subscribeNext
+            - Show the RAC macro
     - RACCommand
-        - Super quick explanation
+        - Super quick explanation, maybe too complex to get into?
         - Allows for creation of signals
         - Returns a signal from the `execute` command
         - Wraps a signal with some nicities like .executing
@@ -169,21 +184,24 @@ In the case of our tweet cells, I would typically create all the view-models for
         - .executionSignals is a signal of signals
             - explain `switchToLatest`?
 
-- Back to explaining how we will use these tools to connect the view-model to the view
+- Connect the code together with RAC and short explanations
 
-##Calling things up the chain
 
-- Still some questions about this
+###Additional notes to maybe add somewhere
 
-###Additional notes
-
-- Exposing the model
 - Transformations take place on the view-model
 - Model changes must go through the view model
 - Binding data from parent view-models to child view-models
+- How does a button in a subview trigger something on the main view-model?
+    - Responder chain is helpful
+    - Potentially calling up through the view-model chain, but feels weird
+    - Typical delegates and block callbacks
 
+---
 
 [^apple-view-models]: In some of the WWDC videos this year, view-models were actually spotted in the sample code apple engineers had on screen. Not sure if any of that made it to the sample code itself.
 [^exposing-models]: In practice it's sometimes pragmatic to expose models via the view-model header instead of duplicating a large amount of properties. More on that later.
 [^downloading-image]: You could expose the URL instead of the image if you are used to using a category on UIImageView for loading images from the network, but I'd encourage moving away from that.
 [^DaveLee]: Thanks to [Dave Lee](https://twitter.com/kastiglione) for exposing this as a good point to cover and for the "View Coordinator" term.
+[^uikit-header]: This is a great principle, but there are some grey areas. For instance, you may consider a UIImage "data" and not presentation information. (I like this approach.) In which case you will need UIKit.h so you can work with the UIImage class.
+[^andy]: I recently was fortunate enough to listen [Andy Matuschak](http://andymatuschak.org) give a talk along the lines of this concept where he makes a case for a "Thick value layer, thin object layer". The concept is similar, but focuses on how we can remove objects, and their stateful side-effecty nature, and build a more functional, testable value layer with new data structures in swift.

@@ -25,12 +25,12 @@ I'm not going to cover the history of MVC/MVVM as it's been covered elsewhere, a
 
 ###Defining MVVM
 
-1. **Model** The model doesn't really change in MVVM. Depending on what you preference is, your models may or may not encapsulate some additional business logic responsibilities. I tend to use it more as a construct with which to hold information representing a data-model object, and keep any consolidated logic for managing/manipulating models in a separate manager type class.
+1. **Model** – The model doesn't really change in MVVM. Depending on what you preference is, your models may or may not encapsulate some additional business logic responsibilities. I tend to use it more as a construct with which to hold information representing a data-model object, and keep any consolidated logic for managing/manipulating models in a separate manager type class.
 2. **View** - The view encompasses the actual UI itself (whether that means `UIView` code, storyboards, or xibs), any view specific logic, and reaction to user input. This includes a lot of the responsibilities handled by the `UIViewController` in iOS, not just `UIView` code and files.
-3. **View-Model** – The term itself can lead to confusion, as it's a mashup of two terms we already know, but it's something entirely different. It's not a model in the traditional data-model structure sense (which again, is just my preference). One of it's responsibilities *is* that of a model representing the data necessary for the view to display itself; but it's also responsible for gathering, interpretting, and transforming that data. It leaves the view (controller) with a more clearly defined task of presenting the data supplied by the view-model.
+3. **View-Model** – The term itself can lead to confusion, as it's a mashup of two terms we already know, but it's something entirely different. It's not a model in the traditional data-model structure sense (which again, is just my preference). One of its responsibilities *is* that of a model representing the data necessary for the view to display itself; but it's also responsible for gathering, interpretting, and transforming that data. It leaves the view (controller) with a more clearly defined task of presenting the data supplied by the view-model.
 
 ###More about the view-model
-The term **view-model** really is quite poor. A better term might be **"View Coordinator"**.[^DaveLee] You can think of it almost like the team of researchers and writers behind a news anchor on tv. It gathers the raw data from the necessary sources (database, web service calls, etc), applies logic, and massages that data into presentation data for the view (controller). It exposes (usually via properties) only the information the view controller needs to know about to do it's job of displaying the view. It's also responsible for making changes to the data (e.g. updating models/database, API calls).
+The term **view-model** really is quite poor for our purposes. A better term might be **"View Coordinator"**.[^DaveLee] You can think of it almost like the team of researchers and writers behind a news anchor on tv. It gathers the raw data from the necessary sources (database, web service calls, etc), applies logic, and massages that data into presentation data for the view (controller). It exposes (usually via properties) only the information the view controller needs to know about to do it's job of displaying the view. It's also responsible for making changes to the data (e.g. updating models/database, API calls).
 
 
 ##MVVM in a MVC world
@@ -49,7 +49,7 @@ For the sake of this diagram, let's reverse the **V** and **C** in **MVC**, so t
 
 For our sake, we aren't actually removing the concept of the view controller or dropping the "controller" term. (Phew.) We are just going to carve out that chunk of overlapping responsibilities into the view-model, and make the view controller's life much easier. 
 
-What we really end up with is **MVMCV**. **M**odel **V**iew-**M**odel **C**ontroller **V**iew. I'm sure I'm giving someone fits with my free spiritted application design pattern hacking, but this is very accurate for our purposes.
+What we really end up with is **MVMCV**. **M**odel **V**iew-**M**odel **C**ontroller **V**iew. I'm sure I'm giving someone fits with my free spirited application design pattern hacking.
 
 ![Creating a new pattern](assets/images/MCVMVMV.gif)
 
@@ -63,11 +63,11 @@ The view-model will live as a property on the view controller. The view controll
 
 ##View-Model and View Controller, together but separate
 
-Let's look at a simple view-model header to get a better idea of what our new component looks like. For our simple scenario, let's build a twitter client that lets a user lookup the most recent tweets of any twitter user by entering their username and hitting "Go". Our example interface will:
+Let's look at a simple view-model header to get a better idea of what our new component looks like. For our simple scenario, let's build a twitter client that lets a user lookup the most recent replies at any twitter user by entering their username and hitting "Go". Our example interface will:
 
 - Have a `UITextField` where the user can enter a twitter username, and a "Go" `UIButton`
 - Have a `UIImageView` and a `UILabel` that display the avatar and name of the current user being viewed
-- Have a `UITableView` below that where we view the most recent tweets
+- Have a `UITableView` below that where we view the most recent replies (tweets)
 - Allow for infinite scrolling
 
 
@@ -156,17 +156,91 @@ The imperative shell is where we do all the state-changing, application-world-al
 
 The biggest advantage of this functional core(ish) view-model, aside from the number of bugs eliminated everytime you reduce state, is that it becomes extremely unit testable. If you have methods that should generate the same output everytime they are supplied the same input, that fits extremely well into the world of unit tests. We now have our data gathering/logic/transforming extracted away from the complexities of a view controller. That means no crazy mock objects, method swizzling, or other insane workarounds (hopefully) are required to build really good tests.
 
-##Reactive Cocoa
+##Connecting Everything
 
-**So how do we update our view controller when these public properties on the view model change?**
+**So how do we update our view controller when public properties on the view model change?**
+
+Most of the time we'll initialize view controllers with their corresponding view-model. Something along the lines of what we just saw above:
+
+{% highlight objective-c %}
+MYTwitterUserProfileViewController *profileViewController = 
+    [[MYTwitterUserProfileViewController alloc] initWithViewModel: userProfileViewModel];
+{% endhighlight %}
+
+Sometimes you don't have the option of passing the view-model in during initialization, e.g. in the case of storyboard segues or cell dequeuing. For these you can expose a public writeable view-model property on the view (controller) in question.
+
+{% highlight objective-c %}
+MYTwitterUserCell *cell = 
+    [self.tableView dequeueReusableCellWithIdentifier:@"MYTwitterUserCell" forIndexPath:indexPath];
+// create a view model for the cell from the vc view model and assign it
+cell.viewModel = [self.viewModel viewModelForTwitterUserWithIndex:indexPath.row];
+{% endhighlight %}
+
+So in cases where we can pass in the view-model before a hook like `init` or `viewDidLoad`, we could initialize the state of all our UI elements with the properties off of the view-model.
+
+{% gist sprynmr/cead1f81935f18b2acb5 %}
+
+Great! we've configured our initial value. What about when data on the view-model changes? How will the go button ever become enabled? How will our user label and avatar ever get populated with the results of the network calls?
+
+We could expose the view controller to the view-model so it can call an "updateUI" method on it when something relevant changes. **Noooope.**
+
+We could use delegate methods off of the UITextfield to update the state of the button by checking the view-model everytime there is a character change.
+
+{% gist sprynmr/8a019580d7a3fc829746 %}
+
+This sort of solves for that one scenario where the only thing affecting the `isUsernameValid` on the view-model is via this typing. What if there are other variables/actions that alter that state? What about network calls? Maybe we could add completion handlers to our method calls on the view-model so we can update everything on the UI at that point? Looks like we're going to want centralized UI updating methods. What about using the venerable, cumbersome KVO methods? 
+
+We could probably eventually connect all the contact points on the view-model and view controller using various mechanisms we are familiar with, but you already know [that's not where this is headed](http://www.sprynthesis.com/2014/06/15/why-reactivecocoa/). It creates a large amount of entry points into our code where we have to fully recreate the context of our application state just to do a simple UI update.
+
+##Enter ReactiveCocoa
+
+ReactiveCocoa (RAC) is here to save our bacon, and just maybe give us a little sanity back. Let's look at how.
+
+###RACSignal
+
+`RACSignal` (signal) is the building block for all of RAC. Yes, it's an improvement over the clunky KVO API's, but it's *so much more than that*. It is an object representing the information that we will eventually receive.
+
+It takes all those methods for controlling the flow of information through your app (delegates, callback blocks, notifications, KVO, target/action event observers, etc) and unifies them under one interface. *This just flat out makes sense.* Not only that, it gives you the ability to transform/split/combine/filter that information easily as it flows through your application.
+
+Instead of programming like this:
+
+--Diagram of information flow in an imperative system. Somehow represent all the entry points and having to reference state.--
+
+We get to program like this:
+
+--Diagram showing the flow of a couple signal chains in a node like format being transformed and combined--
+
+This is so much better, because this is the way we actually design in our minds. Well, it was before we spent far too many years [doing extra work for the computer](http://www.sprynthesis.com/2014/06/15/why-reactivecocoa/).
+
+So what is a signal? This is a signal:
+
+--Diagram of a electronic looking box doing nothing--
+
+A signal is an object that sends out a stream of values. But our signal here isn't doing anything. That's because it doesn't have any subscribers. A signal will only send out information if it has a subscriber listening (er, subscribed) to it.
+
+--Diagram of our signal with a subscriber now plugged into it via a cord, and values moving along that cord--
+
+Like I mentioned before, you can filter, transforms, split and combine those values as you see necessary.
+
+--Diagram of a signal chain with some funny machines/gears in the middle transforming our initial value and splitting it out into two subscribers (maybe using the isUsernameValid code above as the value and subscribers)--
+
+####Where do signals get the values they are sending along?
+
+Signals are bits of asynchronous code that wait for something to happen, and then send that value to their subscribers. You can create them manually with the `RACSignal` class method `createSignal`:
+
+--Code showing creating a signal for something asynchronous like a network call--
+
+Luckily, the creators of RAC actually build things with it (fathom that), so they have a strong idea what's needed in our daily work. They have provided us with a wealth of mechanisms to pull signals off of the existing asynchronous patterns I mentioned above. Just don't forget that if you have an asynchronous task that isn't covered with some built in signal, you can *easily* create it with `createSignal`, and similar methods.
+
+One such mechanism is the `RACObserve()` macro. (If you don't like macros, you can easily look under the hood and use the slightly more verbose representation. It's still great.) This macro is the RAC replacement for the woeful KVO APIs that I've mentioned a few times. You just pass in the object and keypath of the property you want to observe. `RACObserve` generates a signal that immediately send the current value of that property (once it gets a subscriber), and any further changes to that library.
+
+
+
+
+
 
 - Simple explanation of RAC with diagrams
     - RACSignal
-        - Primary building block of RAC
-        - Sends a stream of values to it's subscribers
-        - You can transform, split, and combine those values into something more meaningful, building context.
-        - Example of values we would receive
-        - Show multiple subscribers
         - Show transformation (and side effects happening multiple times?)
         - Where do the values come from?
             - Show `createSignal` for something like an API call
@@ -174,6 +248,7 @@ The biggest advantage of this functional core(ish) view-model, aside from the nu
         - What's a subscriber
             - Show subscribeNext
             - Show the RAC macro
+        - Towards the end, explain multiple subscribers generating multiple side effects.
     - RACCommand
         - Super quick explanation, maybe too complex to get into?
         - Allows for creation of signals
@@ -185,6 +260,7 @@ The biggest advantage of this functional core(ish) view-model, aside from the nu
             - explain `switchToLatest`?
 
 - Connect the code together with RAC and short explanations
+    - Point out how context is created
 
 
 ###Additional notes to maybe add somewhere

@@ -27,7 +27,7 @@ I'm not going to cover the history of MVC/MVVM as it's been covered elsewhere, a
 
 1. **Model** – The model doesn't really change in MVVM. Depending on what you preference is, your models may or may not encapsulate some additional business logic responsibilities. I tend to use it more as a construct with which to hold information representing a data-model object, and keep any consolidated logic for managing/manipulating models in a separate manager type class.
 2. **View** - The view encompasses the actual UI itself (whether that means `UIView` code, storyboards, or xibs), any view specific logic, and reaction to user input. This includes a lot of the responsibilities handled by the `UIViewController` in iOS, not just `UIView` code and files.
-3. **View-Model** – The term itself can lead to confusion, as it's a mashup of two terms we already know, but it's something entirely different. It's not a model in the traditional data-model structure sense (which again, is just my preference). One of its responsibilities *is* that of a model representing the data necessary for the view to display itself; but it's also responsible for gathering, interpretting, and transforming that data. This leaves the view (controller) with a more clearly defined task of presenting the data supplied by the view-model.
+3. **View-Model** – The term itself can lead to confusion, as it's a mashup of two terms we already know, but it's something entirely different. It's not a model in the traditional data-model structure sense (which again, is just my preference). One of its responsibilities *is* that of a model representing the data necessary for the view to display itself; but it's also responsible for gathering, interpreting, and transforming that data. This leaves the view (controller) with a more clearly defined task of presenting the data supplied by the view-model.
 
 ### More about the view-model
 The term **view-model** really is quite poor for our purposes. A better term might be **"View Coordinator"**.[^DaveLee] You can think of it almost like the team of researchers and writers behind a news anchor on tv. It gathers the raw data from the necessary sources (database, web service calls, etc), applies logic, and massages that data into presentation data for the view (controller). It exposes (usually via properties) only the information the view controller needs to know about to do it's job of displaying the view. It's also responsible for making changes to the data upstream (e.g. updating models/database, API POST calls).
@@ -60,6 +60,10 @@ What we really end up with is **MVMCV**. **M**odel **V**iew-**M**odel **C**ontro
 Now the view controller's only concerns are configuring and managing the various views with data from the view-model, and letting the view-model know when relevant user input occurs that needs to change data upstream. The view controller doesn't need to know about web service calls, Core Data, model objects[^exposing-models], etc.
 
 The view-model will live as a property on the view controller. The view controller knows about the view-model and it's public properties, but the view-model knows nothing about the view controller. You should already feel better about this design as we have better separation of concerns going on here.
+
+Another way to help you understand how our components fit together, and where the responsibilities fall, is to look at a layer diagram our our new application building blocks.
+
+-- Incorporate Dave's Diagram here and give credit --
 
 ## View-Model and View Controller, together but separate
 
@@ -98,8 +102,8 @@ Pretty straightforward stuff. Notice all those **glorious `readonly` properties*
 #### The view controller would act on the view-model as follows:
 
 - Update the only `readwrite` property on the view-model, `username`, whenever the text in the UITextField changes
-- Call the `getTweetsForCurrentUsername` on the view-model when the "Go" button is tapped
-- Call `loadMoreTweets` on the view-model when the last cell in the table is reached
+- Call `getTweetsForCurrentUsername` on the view-model when the "Go" button is tapped
+- Call `loadMoreTweets` on the view-model when the loading cell in the table is reached
 
 #### Things the view controller isn't doing:
 
@@ -124,6 +128,8 @@ In our example app, the `tweets` array will be full of child view-models that mi
 
 {% gist sprynmr/adfd5eb3775a225a2011 %}
 
+You might think that looks too much like a regular "Tweet" data-model object. Even when similar, the view-model lets us limit the information exposed to only what we need, and provide additional properties that might be transformed or calculated data specific for this view.
+
 ### Mom, where do view-models come from?
 
 So when and where are view-models created? Do view controllers create their own view-models?
@@ -142,11 +148,11 @@ and use it like this:
 
 {% gist sprynmr/194ab0c97500592c3954 %}
 
-So to review, I want to present a profile view controller of our current user, but my profile view controller needs a view-model. Well my main view controller here doesn't know all of the necessary data about this user to build a view-model (nor should it), so it asks it's own view-model to do the dirty work for it.
+In this example I want to present a profile view controller of our current user, but my profile view controller needs a view-model. Well my main view controller here doesn't know all of the necessary data about this user to build a view-model (nor should it), so it asks it's own view-model to do the dirty work for it.
 
 #### Lists of view-models
 
-In the case of our tweet cells, I would typically create all the view-models for the corresponding cells ahead of time when the data driving the screen (probably via a web service call in this case) was gathered. So in our scenario, `tweets` on the main view-model would be an array of `MYTweetCellViewModel` objects. So in `cellForRowAtIndexPath` on my table view, I would simply grab the view-model at the correct index, and assign it to the view-model property on my cell.
+In the case of our tweet cells, I would typically create all the view-models for the corresponding cells ahead of time, when the data driving the screen (probably via a web service call in this case) was gathered. So in our scenario, `tweets` on the main view-model would be an array of `MYTweetCellViewModel` objects. In `cellForRowAtIndexPath` on my table view, I would simply grab the view-model at the correct index, and assign it to the view-model property on my cell.
 
 ## Functional Core, Imperative Shell
 
@@ -160,13 +166,13 @@ That's what we are striving for with view-models. They contain the logic and fun
 
 ### Imperative (Declarative?) Shell
 
-The imperative shell is where we do all the state-changing, application-world-altering dirty work needed to turn our view-model data into something for the user on the screen. This is our view (controller), where we have pragmatically isolated the UIKit work. I would still make it a point to eliminate as much state as possible and do this work in a declarative nature using something like ReactiveCocoa, but we are still operating in an imperative world with iOS and UIKit.
+The imperative shell is where we do all the state-changing, application-world-altering dirty work needed to turn our view-model data into something for the user on the screen. This is our view (controller), where we have pragmatically isolated the UIKit work. I would still make it a point to eliminate as much state as possible and do this work in a declarative nature using something like ReactiveCocoa, but iOS and UIKit are imperative by design.[^table-data-source]
 
 ### Testable Core
 
-I imagine I'm not the only one that looked at units tests on iOS for awhile, even read books on the subject, and came away thinking it was nasty, hacky process.
+I imagine I'm not the only one that when exploring units tests on iOS, perhaps even reading books on the subject, came away thinking it was nasty, hacky, hot mess.
 
-The biggest advantage of this functional core(ish) view-model, aside from the number of bugs eliminated everytime you reduce state, *is that it becomes extremely unit testable*. If you have methods that should generate the same output everytime they are supplied the same input, that fits extremely well into the world of unit tests. We now have our data gathering/logic/transforming extracted away from the complexities of a view controller. That means no crazy mock objects, method swizzling, or other insane workarounds (hopefully) are required to build really good tests.
+The biggest advantage of this functional core(ish) view-model, aside from the number of bugs eliminated every time you reduce state, *is that it becomes extremely unit testable*. If you have methods that should generate the same output everytime they are supplied the same input, that fits extremely well into the world of unit tests. We now have our data gathering/logic/transforming extracted away from the complexities of a view controller. That means no crazy mock objects, method swizzling, or other insane workarounds (hopefully) are required to build really good tests.
 
 ## Connecting Everything
 
@@ -264,7 +270,7 @@ Here is a simple subscriber, created by passing a block to the `subscribeNext` i
 
 Notice that RAC only deals in objects, not primitives like `BOOL`. Not to worry though, as RAC mostly handles the conversions for you.
 
-Luckily this sort of binding behavior was also recognized by the RAC creators as a common necessity, so they provided another macro `RAC()`. Similar to `RACObserve()`, you provide the object and the parameter you want the incoming value bound TO, and it does the work under the hood of creating a subscriber and updating the value. Our sample now looks like this:
+Luckily this sort of binding behavior was also recognized by the RAC creators as a common necessity, so they provided another macro `RAC()`. Similar to `RACObserve()`, you provide the object and the parameter you want the incoming value bound TO, and it does the work under the hood of creating a subscriber and updating the value of the property. Our sample now looks like this:
 
 {% highlight objective-c %}
 - (void) viewDidLoad {
@@ -281,40 +287,40 @@ Now we're getting into the methods that RAC provides us with for transforming ou
 
 {% gist sprynmr/a731e8026c2143eaf2e3 %}
 
-So now we've bound the changes that occur to `isUsernameValid` on our view-model DIRECTLY to the enabled property on our goButton. How cool is that? The binding to alpha is even cooler, because we are transforming our value into something relevant using the `map` method. (Notice we return an object here. This is basically the one spot where you need to take care of converting your primitive to an object for RAC because it can't derive that for you.)
+So now we've bound the changes that occur to `isUsernameValid` on our view-model DIRECTLY to the enabled property on our goButton. How cool is that? The binding to alpha is even cooler, because we are transforming our value into something relevant for the `alpha` property on the button using the `map` method. (Notice we return an `NSNumber` here instead of a primitive float. This is basically the one spot where you need to take care of converting your primitive to an object for RAC because it can't derive that for you.)
 
-#### Eliminating even more state
+### Multiple subscribers, side effects, and expensive operations
 
-Talk about exposing signals on our view-model instead of plain properties to even further reduce state.
+One important thing to realize when subscribing to signal chains, is that every time a new value is sent through that chain, it is actually sent once per subscriber. It makes sense when you realize that as far as we are concerned, these values sent by a signal aren't stored anywhere (aside from the internal RAC implementation). When the signal needs to send out a new value, it loops through all its subscribers and sends them each that value[^simplification].
 
-#### Multiple subscribers and side effects
+Why is this important? It means that any side effects you might have in your signal chain somewhere, any transformations that affect the application world, will occur multiple times. This is often unexpected by users new to RAC. (It also goes against the idea of building functionally – data in, data out).
 
--- diagram of a side effect --
+-- diagram of a side effect (arm reachng out from signal chain box and pressing a button in the outside world) --
+
+A contrived example might be a signal for a button tap event that updates a counter property on `self` somewhere in the signal chain. If there are multiple subscribers to this signal chain, that property is going to be incremented more than you intend. You should strive to eliminate side effects from your signal chains as much as possible. When side effects are unavoidable, there are mechanisms in place you can use to prevent this. I'll explore that in another article.
+
+In addition to side effects, you need to pay attention to signal chains with expensive operations like network requests. Although not a side effect, there are two potential issues to be aware of.
+
+1. Network requests introduce variable data into your signal chain. (Two identical requests could return different data.)
+2. Network requests are slow.
+
+As an example, you may have a signal that sends a value each time a button is tapped, and you want to transform that value into the results of a network request. If you have multiple subscribers doing something with the value returned by that signal chain, you will be making multiple network requests.
+
+-- A bit of code demoing this --
+
+Network requests obviously aren't an uncommon need. As you would expect, RAC provides solutions for these situations, namely `RACCommand`. I'll get into `RACCommand` more in my next post.
+
 
 ## Tweetboat Plus
 
-Connect the rest of the code
+- Connect the rest of the code
+- Show how context is naturally created/available when combining events
+- Note when connecting cells that you only create the observer once for performance reasons
+- Strongify Dance
 
------
+#### BONUS - Eliminating even more state
 
-##Remaining:
-
-- RACCommand
-    - I think I'm going to try and save RACCommand for my next post, and hopefully signal of signals as well.
-
-- Connect the code together with RAC and short explanations
-    - Point out how context is created
-    - Explain derived state?
-
-
-###Additional notes to maybe add somewhere
-
-- Model changes must go through the view model
-- Binding data from parent view-models to child view-models
-- How does a button in a subview trigger something on the main view-model?
-    - Responder chain is helpful
-    - Potentially calling up through the view-model chain, but feels weird
-    - Typical delegates and block callbacks
+Talk about exposing signals on our view-model instead of plain properties to even further reduce state.
 
 ---
 
@@ -322,5 +328,7 @@ Connect the rest of the code
 [^exposing-models]: In practice it's sometimes pragmatic to expose models via the view-model header instead of duplicating a large amount of properties. More on that later.
 [^downloading-image]: You could expose the URL instead of the image if you are used to using a category on UIImageView for loading images from the network. That does give a more clear break between the view-model and UIKit, but I view the UIImage itself more as data, and less as the exact presentation of that data. These aren't hard and fast lines.
 [^DaveLee]: Thanks to [Dave Lee](https://twitter.com/kastiglione) for exposing this as a good point to cover and for the "View Coordinator" term.
-[^uikit-header]: This is a great principle, but there are some grey areas. For instance, you may consider a UIImage "data" and not presentation information. (I like this approach.) In which case you will need UIKit.h so you can work with the UIImage class.
+[^uikit-header]: This is a great principle, but there are some grey areas. For instance, you may consider a UIImage "data" and not presentation information. (I like this approach.) In this case, you will need UIKit.h so you can work with the UIImage class.
 [^andy]: I recently was fortunate enough to listen [Andy Matuschak](http://andymatuschak.org) give a talk along the lines of this concept where he makes a case for a "Thick value layer, thin object layer". The concept is similar, but focuses on how we can remove objects, and their stateful side-effecty nature, and build a more functional, testable value layer with new data structures in swift.
+[^simplification]: This is a simplified explanation for how signal chains actually work, but the basic idea is true.
+[^table-data-source]: The table data source is a great example of this, as it's delegate pattern forces the use of state on the delegate to be able to provide information to the table view when requested. In fact the delegate pattern in general forces a whole lot of use of state.

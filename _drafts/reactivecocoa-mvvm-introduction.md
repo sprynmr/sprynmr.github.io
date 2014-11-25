@@ -61,14 +61,14 @@ Now the view controller's only concerns are configuring and managing the various
 
 The view-model will live as a property on the view controller. The view controller knows about the view-model and it's public properties, but the view-model knows nothing about the view controller. You should already feel better about this design as we have better separation of concerns going on here.
 
-Another way to help you understand how our components fit together, and where the responsibilities fall, is to look at a layer diagram our our new application building blocks.
+Another way to help you understand how our components fit together, and where the responsibilities fall, is to look at a layer diagram of our new application building blocks.
 
 [![MVVM Layer Architecture](/assets/images/mvvm-layers.svg)](/assets/images/mvvm-layers.svg)
 (Courtesy [Dave Lee @kastiglione](https://twitter.com/kastiglione))
 
 ## View-Model and View Controller, together but separate
 
-Let's look at a simple view-model header to get a better idea of what our new building block looks like. For our simple scenario, let's build a fake twitter client that lets a user lookup the most recent replies at any twitter user by entering their username and hitting "Go". Our example interface will:
+Let's look at a simple view-model header to get a better idea of what our new building block looks like. For a simple scenario, let's build a fake twitter client that lets someone lookup the most recent replies at any twitter user by entering their username and hitting "Go". Our example interface will:
 
 - Have a `UITextField` where the user can enter a twitter username, and a "Go" `UIButton`
 - Have a `UIImageView` and a `UILabel` that display the avatar and name of the current user being viewed
@@ -98,7 +98,7 @@ Pretty straightforward stuff. Notice all those **glorious `readonly` properties*
 - Update the `text` on the UILabel with the string from `userFullName`
 - Update the `image` on the UIImageView with the value from `userAvatarImage`
 - Configure the table view cells with the objects in `tweets` (More on that later)
-- Supply a "loading" cell if `finishedLoading` is NO when reaching the bottom of the table view
+- Supply a "loading" cell if `allTweetsLoaded` is NO when reaching the bottom of the table view
 
 #### The view controller would act on the view-model as follows:
 
@@ -109,7 +109,7 @@ Pretty straightforward stuff. Notice all those **glorious `readonly` properties*
 #### Things the view controller isn't doing:
 
 - Making web service calls
-- Managing the array of tweets
+- Managing the `tweets` array
 - Determining what a valid username is
 - Formatting the user's first and last name into a full name
 - Downloading the user avatar and turning it into a UIImage [^downloading-image]
@@ -119,17 +119,17 @@ Pretty straightforward stuff. Notice all those **glorious `readonly` properties*
 
 ## Child View-Models
 
-I mentioned configuring table view cells with objects from the `tweets` array on the view model. Typically you would expect those to be data-model objects representing tweets. You may have been wondering about that, since we try not to expose data-model objects via the MVVM pattern[^exposing-models].
+I mentioned configuring table view cells with objects from the `tweets` array on the view-model. Typically you would expect those to be data-model objects representing tweets. You may have been wondering about that, since we try not to expose data-model objects via the MVVM pattern[^exposing-models].
 
 **A view-model doesn't have to represent everything on the screen.** You can use child view-models to represent smaller, potentially more encapsulated portions of the screen. This is especially beneficial if that bit of view (e.g. a table cell) could be re-used in your app and/or represent multiple data-model objects.
 
-You don't always need child view-models. For example, I might use a table header view to render the top section of our "tweetboat plus" app. It's not a reusable component, so I might just pass in the same view-model we are already using for the view controller to that custom view. It would use the information it needed and ignore the rest. This is an especially awesome way to keep your subviews in sync, as they can all be effectively working with the same exact context of information.
+You don't always need child view-models. For example, I might use a table header view to render the top section of our "tweetboat plus" app. It's not a reusable component, so I might just pass in the same view-model we are already using for the view controller to that custom header view. It would use the information it needed from that view-model and ignore the rest. This is an especially awesome way to keep your subviews in sync, as they can all be effectively working with the same exact context of information.
 
 In our example app, the `tweets` array will be full of child view-models that might look like this:
 
 {% gist sprynmr/adfd5eb3775a225a2011 %}
 
-You might think that looks too much like a regular "Tweet" data-model object. Why the work of converting it to a view-model? Even when similar, the view-model lets us limit the information exposed to only what we need, provide additional properties that might be transformed, or calculate data specific for this view.
+You might think that looks too much like a regular "Tweet" data-model object. Why the work of converting it to a view-model? Even when similar, the view-model lets us limit the information exposed to only what we need, provide additional properties that might be transformed, or calculate data specific for this view. (Again, it's also nice when possible to not expose the mutable data-model objects, as we want the view-model itself to be responsible for making changes to those.)
 
 ### Mom, where do view-models come from?
 
@@ -138,6 +138,8 @@ So when and where are view-models created? Do view controllers create their own 
 #### View-models begat view-models.
 
 Strictly speaking, you should create a view-model for your top view-controller in your app delegate. Assuming all other view controllers are effectively "children" of your primary view controller; When presenting a new view controller, or bit of view that's represented by a view-model, you ask the current view-model to create the necessary view-model for you.
+
+![Child View Model Diagram](/assets/images/child-view-models.svg)
 
 Say we wanted to add a profile view controller that would show whenever you tapped the avatar in the top portion of our app. We might add a method to our primary view-model that looked something like this:
 
@@ -149,9 +151,7 @@ and use it like this in our primary view controller:
 
 {% gist sprynmr/194ab0c97500592c3954 %}
 
-In this example I want to present a profile view controller of our current user, but my profile view controller needs a view-model. Well my main view controller here doesn't know all of the necessary data about this user to build a view-model (nor should it), so it asks it's own view-model to do the dirty work for it of creating the necessary view model.
-
-![Child View Model Diagram](/assets/images/child-view-models.svg)
+In this example I want to present a profile view controller of our current user, but my profile view controller needs a view-model. My main view controller here doesn't know all of the necessary data about this user to build the necessary view-model (nor should it), so it asks it's own view-model to do the dirty work for it of creating the new view model.
 
 #### Lists of view-models
 
@@ -163,7 +163,7 @@ This view-model approach to application design is a stepping stone on the path t
 
 ### Functional Core
 
-The view-model is the ["functional core"](http://www.smashingmagazine.com/2014/07/02/dont-be-scared-of-functional-programming/), though pragmatically in iOS/Objective-C it's tricky to get to the purely functional level. The general idea is to make your view-models have as little dependence and impact on the rest of the "application world" as possible. What does that mean? Think of simple functions you probably learned when first studying programming. They accepted maybe one or two parameters, and output a result value. **Data in, data out.** Maybe the function did some math, or combined a first and last name. No matter what else was going on in the application, the same input would create the same output. That's the functional aspect.
+The view-model is the ["functional core"](http://www.smashingmagazine.com/2014/07/02/dont-be-scared-of-functional-programming/), though pragmatically in iOS/Objective-C it's tricky to get to the purely functional level (Swift provides some additional functionality that will get us closer). The general idea is to make your view-models have as little dependence and impact on the rest of the "application world" as possible. What does that mean? Think of simple functions you probably learned when first studying programming. They accepted maybe one or two parameters, and output a result value. **Data in, data out.** Maybe the function did some math, or combined a first and last name. No matter what else was going on in the application, the same input would create the same output. That's the functional aspect.
 
 That's what we are striving for with view-models. They contain the logic and functionality for transforming data and storing it's output in properties. Ideally the same input (e.g. web service response) will derive the same output (property values). This means eliminating as many factors as possible by which the rest of the "application world" might affect the output, [such as using a lot of state](http://www.sprynthesis.com/2014/06/15/why-reactivecocoa/). **A great first step would be not including UIKit.h in your view-model header.**[^uikit-header] UIKit is, by it's nature, going to affect a lot of the application world. It contains many "side-effects", whereby changing one value or calling one method will trigger many indirect (even unknowable) changes.
 
@@ -203,13 +203,13 @@ In cases where we can pass in the view-model before a hook like `init` or `viewD
 
 Great! We've configured our initial values. What about when data on the view-model changes? How will the go button ever become enabled? How will our user label and avatar ever get populated with the results of the network calls?
 
-We could expose the view controller to the view-model so it can call an "updateUI" method on it when  relevant data changes or something similar. **Noooope.** Fire a notification? **Nooope**
+We could expose the view controller to the view-model so it can call an "updateUI" method on it when  relevant data changes or something similar. (Don't do this.) Make the view controller a delegate on the view-model? Fire a notification on the view-model when anything changes? *Nooope.*
 
-We could use delegate methods off of the UITextfield to update the state of the button by checking the view-model every time there is a character change.
+Our view controller knows about some changes being made. We could use delegate methods off of the `UITextfield` to update the state of the button by checking the view-model every time there is a character change.
 
 {% gist sprynmr/8a019580d7a3fc829746 %}
 
-This sort of solves for that one scenario where the only thing affecting the `isUsernameValid` on the view-model is via the textfield changing. What if there are other variables/actions that alter the `isUsernameValid` state? What about network calls? Maybe we could add completion handlers to our method calls on the view-model so we can update everything on the UI at that point? What about using the venerable, cumbersome KVO methods?
+This sort of solves for the scenario where the only thing affecting the `isUsernameValid` on the view-model is the textfield changing. What if there are other variables/actions that alter the `isUsernameValid` state? What about network calls in the view-model? Maybe we could add completion handlers to our method calls on the view-model so we can update everything on the UI at that point? What about using the venerable, cumbersome KVO methods?
 
 We could probably, eventually, connect all the contact points on the view-model and view controller using various mechanisms we are familiar with, but you already know [that's not where this is headed](http://www.sprynthesis.com/2014/06/15/why-reactivecocoa/). It creates a large amount of entry points into our code where we have to fully recreate the context of our application state just to do a simple UI update.
 
@@ -221,51 +221,57 @@ Consider controlling the flow of information through a new user screen that upda
 
 <a href="/assets/images/new-user-form-imperative.svg"><img src="/assets/images/new-user-form-imperative.svg" width="800" /></a>
 
-You end up carefully threading your simple logic through many different bits of otherwise unrelated context in your code by using state. See all the different entry points into your flow? (And this is just ONE thread of logic for ONE UI element.) [The abstraction we are using to program isn't smart enough](http://www.sprynthesis.com/2014/06/15/why-reactivecocoa/) to track the relationships of all these things for us, so we end up doing it (poorly) ourselves.
+You end up carefully threading your simple logic through many different bits of otherwise unrelated contexts in your code by using state. See all the different entry points into your flow? (And this is just *one* thread of logic for *one* UI element.) [The abstraction we are using to program isn't smart enough](http://www.sprynthesis.com/2014/06/15/why-reactivecocoa/) to track the relationships of all these things for us, so we end up doing it (poorly) ourselves.
 
 **Let's look at the declarative version:**
 
-<a href="/assets/images/new-user-form-declarative.svg"><img src="/assets/images/new-user-form-declarative.svg" width="800" /></a>
+<a href="/assets/images/new-user-form-declarative.svg"><img src="/assets/images/new-user-form-declarative.svg" width="900" /></a>
 
-This may look like an old school CS diagram for documenting the flow of our application. With a declarative style of programming, we use a higher level abstraction that lets us actually program much closer to the way we design the flow in our minds. We make the computer do more of the work for us.
+This may look like an old school CS diagram for documenting the flow of our application. With a declarative style of programming, we use a higher level abstraction that lets us actually program much closer to the way we design the flow in our minds. We make the computer do more of the work for us. The actual code now resembles this diagram closely.
 
 ### RACSignal
 
-`RACSignal` (signal) is the building block for all of RAC. It is an object that represents information that we will eventually receive. When you have a concrete representation of the information you will receive at some point in time, you can go ahead and apply logic and build your information flow up front (declarative), instead of having to wait for that event to occur (imperative).
+`RACSignal` (signal) is the building block for all of RAC. It is an object that represents information that we will eventually receive. When you have a concrete representation of the information you will receive at some point in time, **you can go ahead and apply logic and build your information flow up front (declarative)**, instead of having to wait for that event to occur (imperative).
 
-**A signal takes all those methods for controlling the flow of information through your app (delegates, callback blocks, notifications, KVO, target/action event observers, etc) and unifies them under one interface.** *This just flat out makes sense.* Not only that, it gives you the ability to transform/split/combine/filter that information easily as it flows through your application.
+**A signal takes all those async methods for controlling the flow of information through your app (delegates, callback blocks, notifications, KVO, target/action event observers, etc) and unifies them under one interface.** *This just flat out makes sense.* Not only that, it gives you the ability to transform/split/combine/filter that information easily as it flows through your application.
 
--- diagram of pulling signals off various async tools? --
+![Replace standard async tools](/assets/images/replace-async-tools.svg)
 
 #### So what is a signal? This is a signal:
 
---Diagram of a electronic looking box doing nothing--
+![A signal doing nothing](/assets/images/signal-no-subscribers.svg)
 
 A signal is an object that sends out a stream of values. But our signal here isn't doing anything. That's because it doesn't have any subscribers. A signal will only send out information if it has a subscriber listening (er, subscribed) to it. It will send that subscriber zero or more "next" events containing the value, followed by either a "complete" event or an "error" event. (A signal is similar to a "promise" in some other languages/toolkits, but far more powerful as it isn't limited to only sending a return value once to it's subscribers.)
 
---Diagram of our signal with a subscriber now plugged into it via a cord, and values moving along that cord--
+![A signal with a subscriber](/assets/images/signal-with-subscriber.svg)
 
-Like I mentioned before, you can filter, transforms, split and combine those values as you see necessary.
+Like I mentioned before, you can filter, transforms, split and combine those values as you see necessary. Different subscribers may need to use the values sent via the signal in different ways.
 
---Diagram of a signal chain with some funny machines/gears in the middle transforming our initial value and splitting it out into two subscribers (maybe using the isUsernameValid code above as the value and subscribers)--
+![A signal with two subscribers](/assets/images/signal-map.svg)
 
 #### Where do signals get the values they are sending along?
 
-Signals are bits of asynchronous code that wait for something to happen, and then send the resulting value to their subscribers. You can create them manually with the `createSignal` class method on `RACSignal`:
+Signals are bits of asynchronous code that wait for something to happen, and then send the resulting value to their subscribers. You can create them manually with the `createSignal:` class method on `RACSignal`:
 
---Code showing creating a signal for something asynchronous like a network call--
+{% gist sprynmr/fedd52e32a6ead20369c %}
 
-Luckily, the creators of RAC actually use their own library to build real things (fathom that), so they have a strong idea what's needed in our daily work. They have provided us with a wealth of mechanisms to pull signals off of the existing asynchronous patterns I mentioned above. Just don't forget that if you have an asynchronous task that isn't covered with some built in signal, you can *easily* create it with `createSignal`, and similar methods.
+Here I'm creating a signal using a (fake) network operation that has success and fail blocks.[^defer] I use the provided `subscriber` object on which I `sendNext:` and `sendCompleted:` for the success block, or `sendError:` if the failure block fires. I can now subscribe to this signal and I will receive the json value or an error when the response comes back.
 
-One such provided mechanism is the `RACObserve()` macro. (If you don't like macros, you can easily look under the hood and use the slightly more verbose representation. It's still great.) This macro is the RAC replacement for the woeful KVO APIs. You just pass in the object and keypath of the property you want to observe on that object. Given those parameters, `RACObserve` generates a signal that immediately send the current value of that property (once it gets a subscriber), and any further changes to that property.
+Luckily, the creators of RAC actually use their own library to build real things (fathom that), so they have a strong idea what's needed in our daily work. They have provided us with a wealth of mechanisms to pull signals off of the existing asynchronous patterns we commonly use. Just don't forget that if you have an asynchronous task that isn't covered with some built in signal, you can *easily* create it with `createSignal:`, and similar methods.
+
+One such provided mechanism is the `RACObserve()` macro. (If you don't like macros, you can easily look under the hood and use the slightly more verbose representation. It's still great. There are solutions for [using the RAC library with swift](http://www.scottlogic.com/blog/2014/07/24/mvvm-reactivecocoa-swift.html) too, until we get it's [swifty replacement](https://github.com/ReactiveCocoa/ReactiveCocoa/pull/1382).) This macro is the RAC replacement for the woeful KVO APIs. You just pass in the object and keypath of the property you want to observe on that object. Given those parameters, `RACObserve` generates a signal that immediately sends the current value of that property (once it gets a subscriber), and any further changes to that property.
 
 {% highlight objective-c %}
-    RACSignal *usernameValidSignal = RACObserve(self.viewModel, isUsernameValid);
+    RACSignal *usernameValidSignal = RACObserve(self.viewModel, usernameIsValid);
 {% endhighlight %}
 
--- diagram showing our signal box with an eyeball watching an a view-model property. --
+![A signal created with RACObserve](/assets/images/signal-racobserve.svg)
 
--- Should I give quick examples of getting signals for the other asynch mechanisms like delegates and events? --
+This is just one tool provided to create signals. There are several out of the box ways to pull signals off built in control flow mechanisms:
+
+{% gist sprynmr/94472f0285139056da26 %}
+
+Remember you can easily create your own signals as well, including [replacing other delegates](http://spin.atomicobject.com/2014/02/03/objective-c-delegate-pattern/) that may not have built in support. Just think how cool it is that we can now pull signals off all these disconnected async/control flow tools and combine them together! *These can become nodes in that declarative diagram we saw above. That's really exciting.*
 
 #### What is a subscriber?
 
@@ -302,8 +308,6 @@ One important thing to realize when subscribing to signal chains, is that every 
 
 Why is this important? It means that any side effects you might have in your signal chain somewhere, any transformations that affect the application world, will occur multiple times. This is often unexpected by users new to RAC. (It also goes against the idea of building functionally – data in, data out).
 
--- diagram of a side effect (arm reaching out from signal chain box and pressing a button in the outside world) --
-
 A contrived example might be a signal for a button tap event that updates a counter property on `self` somewhere in the signal chain. If there are multiple subscribers to this signal chain, that property is going to be incremented more than you intend. You should strive to eliminate side effects from your signal chains as much as possible. When side effects are unavoidable, there are mechanisms in place you can use to prevent this. I'll explore that in another article.
 
 In addition to side effects, you need to pay attention to signal chains with expensive operations and variable data. Network requests are an example of all three:
@@ -314,14 +318,18 @@ In addition to side effects, you need to pay attention to signal chains with exp
 
 As an example, you may have a signal that sends a value each time a button is tapped, and you want to transform that value into the results of a network request. If you have multiple subscribers doing something with the value returned by that signal chain, you will be making multiple network requests.
 
--- A bit of code demoing this --
+![A signal with side effects happening twice](/assets/images/signal-side-effect.svg)
 
-Network requests obviously aren't an uncommon need. As you would expect, RAC provides solutions for these situations, namely `RACCommand`. I'll get into `RACCommand` more in my next post.
+Network requests obviously aren't an uncommon need. As you would expect, RAC provides solutions for these situations, namely `RACCommand` and multicasting. I'll get into both more in my next post.
 
 
 ## Tweetboat Plus
 
-- Connect the rest of the code
+Now that the short introduction is out of the way, lets look at how we might connect our view-model and view controller using ReactiveCocoa.
+
+
+
+
 - Show how context is naturally created/available when combining events
 - Note when connecting cells that you only create the observer once for performance reasons
 - Strongify Dance
@@ -341,3 +349,4 @@ Talk about exposing signals on our view-model instead of plain properties to eve
 [^simplification]: This is a simplified explanation for how signal chains actually work, but the basic idea is true.
 [^table-data-source]: The table data source is a great example of this, as it's delegate pattern forces the use of state on the delegate to be able to provide information to the table view when requested. In fact the delegate pattern in general forces a whole lot of use of state.
 [^almost]: Our nested API block could have access to it's parent's context.
+[^defer]: I could also use the `defer` class method on `RACSignal` if I didn't want my network request to happen until there was a subscriber.

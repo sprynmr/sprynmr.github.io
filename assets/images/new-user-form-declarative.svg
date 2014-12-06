@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 18.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 681 551"
+	 enable-background="new 0 0 681 551" xml:space="preserve">
+<title>Artboard 2</title>
+<desc>Created with Sketch.</desc>
+<g id="Page-1" sketch:type="MSPage">
+	<g id="Artboard-2" sketch:type="MSArtboardGroup">
+		<text transform="matrix(1 0 0 1 183.3675 24)" font-family="'HelveticaNeue'" font-size="15">Enabling the submit button on a new user form</text>
+		<text transform="matrix(1 0 0 1 497.6281 24)" font-family="'HelveticaNeue'" font-size="15"> </text>
+		<text transform="matrix(1 0 0 1 300.09 41)" font-family="'HelveticaNeue-Bold'" font-size="15">Declarative</text>
+		<g id="Oval-91-_x2B_-Event:" transform="translate(27.000000, 57.000000)" sketch:type="MSLayerGroup">
+			<circle id="Oval-91" sketch:type="MSShapeGroup" fill="#D8D8D8" stroke="#979797" cx="40.5" cy="40.5" r="40.5">
+			</circle>
+			<text transform="matrix(1 0 0 1 22.174 31)" font-family="'HelveticaNeue-Bold'" font-size="12">Signal:</text>
+			<text transform="matrix(1 0 0 1 60.8254 31)" font-family="'HelveticaNeue-Bold'" font-size="12"> </text>
+			<text transform="matrix(1 0 0 1 13.942 46)" font-family="'HelveticaNeue'" font-size="12">Username </text>
+			<text transform="matrix(1 0 0 1 7.942 60)" font-family="'HelveticaNeue'" font-size="12">Text Change</text>
+		</g>
+		<g id="Oval-91-_x2B_-Event:_1_" transform="translate(300.000000, 67.000000)" sketch:type="MSLayerGroup">
+			<circle id="Oval-91_1_" sketch:type="MSShapeGroup" fill="#D8D8D8" stroke="#979797" cx="40.5" cy="40.5" r="40.5">
+			</circle>
+			<text transform="matrix(1 0 0 1 22.174 31)" font-family="'HelveticaNeue-Bold'" font-size="12">Signal</text>
+			<text transform="matrix(1 0 0 1 57.4894 31)" font-family="'HelveticaNeue-Bold'" font-size="12"> </text>
+			<text transform="matrix(1 0 0 1 57.49 31)" font-family="'HelveticaNeue'" font-size="12">:</text>
+			<text transform="matrix(1 0 0 1 60.826 31)" font-family="'HelveticaNeue-Bold'" font-size="12"> </text>
+			<text transform="matrix(1 0 0 1 14.95 46)" font-family="'HelveticaNeue'" font-size="12">Password </text>
+			<text transform="matrix(1 0 0 1 7.942 60)" font-family="'HelveticaNeue'" font-size="12">Text Change</text>
+		</g>
+		<g id="Oval-91-_x2B_-Event:_2_" transform="translate(569.000000, 67.000000)" sketch:type="MSLayerGroup">
+			<circle id="Oval-91_2_" sketch:type="MSShapeGroup" fill="#D8D8D8" stroke="#979797" cx="40.5" cy="40.5" r="40.5">
+			</circle>
+			<text transform="matrix(1 0 0 1 22.174 31)" font-family="'HelveticaNeue-Bold'" font-size="12">Signal</text>
+			<text transform="matrix(1 0 0 1 57.4894 31)" font-family="'HelveticaNeue-Bold'" font-size="12"> </text>
+			<text transform="matrix(1 0 0 1 57.49 31)" font-family="'HelveticaNeue'" font-size="12">:</text>
+			<text transform="matrix(1 0 0 1 60.826 31)" font-family="'HelveticaNeue-Bold'" font-size="12"> </text>
+			<text transform="matrix(1 0 0 1 6.94 46)" font-family="'HelveticaNeue'" font-size="12">Male/Female </text>
+			<text transform="matrix(1 0 0 1 21.604 60)" font-family="'HelveticaNeue'" font-size="12">Tapped</text>
+		</g>
+		<g id="Oval-91-_x2B_-Event:_3_" transform="translate(219.000000, 206.000000)" sketch:type="MSLayerGroup">
+			<circle id="Oval-91_3_" sketch:type="MSShapeGroup" fill="#D8D8D8" stroke="#979797" cx="40.5" cy="40.5" r="40.5">
+			</circle>
+			<text transform="matrix(1 0 0 1 21.174 23.415)" font-family="'HelveticaNeue-Bold'" font-size="12">Signal:</text>
+			<text transform="matrix(1 0 0 1 59.8254 23.415)" font-family="'HelveticaNeue-Bold'" font-size="12"> </text>
+			<text transform="matrix(1 0 0 1 12.942 38.415)" font-family="'HelveticaNeue'" font-size="12">Username </text>
+			<text transform="matrix(1 0 0 1 5.502 52.415)" font-family="'HelveticaNeue'" font-size="12">Available API </text>
+			<text transform="matrix(1 0 0 1 23.61 66.415)" font-family="'HelveticaNeue'" font-size="12">Result</text>
+		</g>
+		<g id="Rectangle-26-_x2B_-Filter:" transform="translate(112.000000, 145.000000)" sketch:type="MSLayerGroup">
+			<rect id="Rectangle-26" sketch:type="MSShapeGroup" fill="none" stroke="#979797" width="74" height="74">
+			</rect>
+			<text transform="matrix(1 0 0 1 21.288 21)" font-family="'HelveticaNeue-Bold'" font-size="12">Filter</text>
+			<text transform="matrix(1 0 0 1 50.3754 21)" font-family="'HelveticaNeue-Bold'" font-size="12"> </text>
+			<text transform="matrix(1 0 0 1 50.376 21)" font-family="'HelveticaNeue'" font-size="12">:</text>
+			<text transform="matrix(1 0 0 1 53.712 21)" font-family="'HelveticaNeue-Bold'" font-size="12"> </text>
+			<text transform="matrix(1 0 0 1 9.942 36)" font-family="'HelveticaNeue'" font-size="12">Username </text>
+			<text transform="matrix(1 0 0 1 24.72 50)" font-family="'HelveticaNeue'" font-size="12">Valid </text>
+			<text transform="matrix(1 0 0 1 15.6 64)" font-family="'HelveticaNeue'" font-size="12">Length?</text>
+		</g>
+		<g id="Rectangle-26-_x2B_-Map-Reduce-Latest-In" transform="translate(368.000000, 206.000000)" sketch:type="MSLayerGroup">
+			<rect id="Rectangle-26_1_" sketch:type="MSShapeGroup" fill="none" stroke="#979797" width="147" height="80">
+			</rect>
+			<text transform="matrix(1 0 0 1 16.832 30)" font-family="'HelveticaNeue-Bold'" font-size="12">Map Reduce Latest </text>
+			<text transform="matrix(1 0 0 1 25.52 45)" font-family="'HelveticaNeue-Bold'" font-size="12">Incoming Values </text>
+			<text transform="matrix(1 0 0 1 27.714 60)" font-family="'HelveticaNeue-Bold'" font-size="12">into </text>
+			<text transform="matrix(1 0 0 1 52.818 60)" fill="#508502" font-family="'HelveticaNeue-Bold'" font-size="12">YES</text>
+			<text transform="matrix(1 0 0 1 81.386 60)" font-family="'HelveticaNeue-Bold'" font-size="12">or </text>
+			<text transform="matrix(1 0 0 1 100.058 60)" fill="#D0011B" font-family="'HelveticaNeue-Bold'" font-size="12">NO</text>
+		</g>
+		<g id="Rectangle-27-_x2B_-Button-alpha-and-ena" transform="translate(235.000000, 442.000000)" sketch:type="MSLayerGroup">
+			
+				<linearGradient id="Rectangle-27_1_" gradientUnits="userSpaceOnUse" x1="-199.6651" y1="228.5185" x2="-199.6651" y2="227.5185" gradientTransform="matrix(212 0 0 -81 42435 18510)">
+				<stop  offset="0" style="stop-color:#53A0FE"/>
+				<stop  offset="1" style="stop-color:#3023AE"/>
+			</linearGradient>
+			<path id="Rectangle-27" sketch:type="MSShapeGroup" fill="url(#Rectangle-27_1_)" stroke="#979797" d="M8,0h196c4.4,0,8,3.6,8,8
+				v65c0,4.4-3.6,8-8,8H8c-4.4,0-8-3.6-8-8V8C0,3.6,3.6,0,8,0z"/>
+			<text transform="matrix(1 0 0 1 46.45 30)" fill="#FFFFFF" font-family="'HelveticaNeue-Bold'" font-size="12">Submit button .alpha </text>
+			<text transform="matrix(1 0 0 1 41.998 45)" fill="#FFFFFF" font-family="'HelveticaNeue-Bold'" font-size="12">and .enabled bound to </text>
+			<text transform="matrix(1 0 0 1 62.794 60)" fill="#FFFFFF" font-family="'HelveticaNeue-Bold'" font-size="12">incoming value</text>
+		</g>
+		<path id="Line" sketch:type="MSShapeGroup" stroke="#000000" stroke-linecap="square" d="M94.5,128.5l18,18"/>
+		<path id="Line-decoration-1" stroke="#000000" stroke-linecap="square" d="M112.2,146.2c-1.9-3.4-3.6-6.3-5.5-9.8
+			c-1.5,1.5-2.8,2.8-4.2,4.2C105.8,142.6,108.8,144.2,112.2,146.2L112.2,146.2z"/>
+		<path id="Line_1_" sketch:type="MSShapeGroup" stroke="#000000" stroke-linecap="square" d="M186.5,197.5l38.7,28"/>
+		<path id="Line-decoration-1_1_" stroke="#000000" stroke-linecap="square" d="M224.5,225.1c-2.4-3.1-4.5-5.7-7-8.8
+			c-1.2,1.7-2.3,3.2-3.5,4.9C217.7,222.6,220.9,223.7,224.5,225.1L224.5,225.1z"/>
+		<path id="Line_2_" sketch:type="MSShapeGroup" stroke="#000000" stroke-linecap="square" d="M302.5,246.5h65.6"/>
+		<path id="Line-decoration-1_2_" stroke="#000000" stroke-linecap="square" d="M367.5,246.5c-3.8-1.1-7-1.9-10.8-3c0,2.1,0,3.9,0,6
+			C360.5,248.4,363.7,247.6,367.5,246.5L367.5,246.5z"/>
+		<path id="Line_3_" sketch:type="MSShapeGroup" stroke="#000000" stroke-linecap="square" d="M361.5,144.5l32,65.1"/>
+		<path id="Line-decoration-1_3_" stroke="#000000" stroke-linecap="square" d="M393.3,209.1c-0.7-3.9-1.3-7.2-2.1-11
+			c-1.9,0.9-3.5,1.7-5.4,2.6C388.4,203.7,390.7,206.2,393.3,209.1L393.3,209.1z"/>
+		<path id="Line_4_" sketch:type="MSShapeGroup" stroke="#000000" stroke-linecap="square" d="M341.5,365.9V441"/>
+		<path id="Line-decoration-1_4_" stroke="#000000" stroke-linecap="square" d="M341.5,440.9c1-3.8,2-7,3-10.8c-2.1,0-3.9,0-6,0
+			C339.5,433.9,340.5,437.2,341.5,440.9L341.5,440.9z"/>
+		<path id="Line_5_" sketch:type="MSShapeGroup" stroke="#000000" stroke-linecap="square" d="M581.3,135.6l-72.8,74"/>
+		<path id="Line-decoration-1_5_" stroke="#000000" stroke-linecap="square" d="M509.1,209c3.4-2,6.3-3.6,9.7-5.6
+			c-1.5-1.5-2.8-2.7-4.3-4.2C512.6,202.6,511,205.6,509.1,209L509.1,209z"/>
+		<text transform="matrix(1 0 0 1 124 361)" fill="#D0011B" font-family="'HelveticaNeue-Bold'" font-size="12">NO</text>
+		<text transform="matrix(1 0 0 1 418 311)" fill="#619400" font-family="'HelveticaNeue-Bold'" font-size="12">YES</text>
+		<text transform="matrix(1 0 0 1 441.568 311)" font-family="'HelveticaNeue-Bold'" font-size="12">/</text>
+		<text transform="matrix(1 0 0 1 446.02 311)" fill="#D0011B" font-family="'HelveticaNeue-Bold'" font-size="12">NO</text>
+		<text transform="matrix(1 0 0 1 529 220)" font-family="'HelveticaNeue'" font-size="10">Take all the latest </text>
+		<text transform="matrix(1 0 0 1 529 232)" font-family="'HelveticaNeue'" font-size="10">incoming values and </text>
+		<text transform="matrix(1 0 0 1 529 244)" font-family="'HelveticaNeue'" font-size="10">perform logic to see </text>
+		<text transform="matrix(1 0 0 1 529 256)" font-family="'HelveticaNeue'" font-size="10">whether the form is </text>
+		<text transform="matrix(1 0 0 1 529 268)" font-family="'HelveticaNeue'" font-size="10">valid or not yet. Output </text>
+		<text transform="matrix(1 0 0 1 529 280)" font-family="'HelveticaNeue'" font-size="10">a YES or NO.</text>
+		<text transform="matrix(1 0 0 1 193 166)" font-family="'HelveticaNeue'" font-size="10">If it doesn’t pass the </text>
+		<text transform="matrix(1 0 0 1 193 178)" font-family="'HelveticaNeue'" font-size="10">filter, it doesn’t </text>
+		<text transform="matrix(1 0 0 1 193 190)" font-family="'HelveticaNeue'" font-size="10">continue on</text>
+		<text transform="matrix(1 0 0 1 224 299)" font-family="'HelveticaNeue'" font-size="10">Replace text change value </text>
+		<text transform="matrix(1 0 0 1 224 311)" font-family="'HelveticaNeue'" font-size="10">with new signal when we </text>
+		<text transform="matrix(1 0 0 1 224 323)" font-family="'HelveticaNeue'" font-size="10">check the API</text>
+		<text transform="matrix(1 0 0 1 79 276)" font-family="'HelveticaNeue'" font-size="10">Whenever username </text>
+		<text transform="matrix(1 0 0 1 79 288)" font-family="'HelveticaNeue'" font-size="10">text changes, always </text>
+		<text transform="matrix(1 0 0 1 79 300)" font-family="'HelveticaNeue'" font-size="10">immediately disable </text>
+		<text transform="matrix(1 0 0 1 79 312)" font-family="'HelveticaNeue'" font-size="10">the submit button by </text>
+		<text transform="matrix(1 0 0 1 79 324)" font-family="'HelveticaNeue'" font-size="10">sending </text>
+		<text transform="matrix(1 0 0 1 117.16 324)" fill="#D0011B" font-family="'HelveticaNeue-Bold'" font-size="10">NO</text>
+		<text transform="matrix(1 0 0 1 132.35 324)" font-family="'HelveticaNeue'" font-size="10">.</text>
+		<text transform="matrix(1 0 0 1 349 394)" font-family="'HelveticaNeue'" font-size="10">A stream of </text>
+		<text transform="matrix(1 0 0 1 403.09 394)" fill="#508502" font-family="'HelveticaNeue-Bold'" font-size="10">YES</text>
+		<text transform="matrix(1 0 0 1 349 406)" font-family="'HelveticaNeue'" font-size="10">and </text>
+		<text transform="matrix(1 0 0 1 368.64 406)" fill="#D0011B" font-family="'HelveticaNeue-Bold'" font-size="10">NO</text>
+		<text transform="matrix(1 0 0 1 386.83 406)" font-family="'HelveticaNeue'" font-size="10">flow into </text>
+		<text transform="matrix(1 0 0 1 349 418)" font-family="'HelveticaNeue'" font-size="10">our binding</text>
+		<path id="Line_6_" sketch:type="MSShapeGroup" fill="none" stroke="#000000" stroke-linecap="square" d="M68.5,365.5l1-227"/>
+		<path id="Line_7_" sketch:type="MSShapeGroup" fill="none" stroke="#000000" stroke-linecap="square" d="M68.5,365.5h273.2"/>
+		<path id="Line_8_" sketch:type="MSShapeGroup" fill="none" stroke="#000000" stroke-linecap="square" d="M434.5,286.5l-93,79"/>
+	</g>
+</g>
+</svg>

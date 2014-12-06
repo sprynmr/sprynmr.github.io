@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="700px" height="424px" viewBox="0 0 700 424" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.1.1 (8761) - http://www.bohemiancoding.com/sketch -->
+    <title>Artboard 1</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="Artboard-1" sketch:type="MSArtboardGroup">
+            <rect id="Rectangle-1" stroke="#979797" fill="#D8D8D8" sketch:type="MSShapeGroup" x="42" y="81" width="125" height="171"></rect>
+            <text id="VM" opacity="0.201958955" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="72" font-weight="bold" fill="#000000">
+                <tspan x="51" y="151">VM</tspan>
+            </text>
+            <g id="Rectangle-1-+-VM" sketch:type="MSLayerGroup" transform="translate(271.000000, 163.000000)">
+                <rect id="Rectangle-1" stroke="#979797" fill="#D8D8D8" sketch:type="MSShapeGroup" x="0" y="1" width="125" height="171"></rect>
+                <text id="VM" opacity="0.201958955" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="72" font-weight="bold" fill="#000000">
+                    <tspan x="9" y="70.5">VM</tspan>
+                </text>
+            </g>
+            <g id="Rectangle-1-+-VM" sketch:type="MSLayerGroup" transform="translate(478.000000, 88.000000)">
+                <rect id="Rectangle-1" stroke="#979797" fill="#D8D8D8" sketch:type="MSShapeGroup" x="0" y="1" width="125" height="171"></rect>
+                <text id="VM" opacity="0.201958955" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="72" font-weight="bold" fill="#000000">
+                    <tspan x="9" y="70.5">VM</tspan>
+                </text>
+            </g>
+            <rect id="Rectangle-1" stroke="#979797" fill="#D8D8D8" sketch:type="MSShapeGroup" x="80" y="156" width="125" height="171"></rect>
+            <rect id="Rectangle-1" stroke="#979797" fill="#D8D8D8" sketch:type="MSShapeGroup" x="309" y="238.5" width="125" height="171"></rect>
+            <rect id="Rectangle-1" stroke="#979797" fill="#D8D8D8" sketch:type="MSShapeGroup" x="513" y="163.5" width="125" height="171"></rect>
+            <text id="Creating-a-new-View-" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="18" font-weight="bold" fill="#000000">
+                <tspan x="133" y="31">Creating a new View Controller and its View-Model</tspan>
+            </text>
+            <text id="VC" opacity="0.201958955" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="72" font-weight="bold" fill="#000000">
+                <tspan x="93" y="226">VC</tspan>
+            </text>
+            <text id="VC" opacity="0.201958955" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="72" font-weight="bold" fill="#000000">
+                <tspan x="322" y="308.5">VC</tspan>
+            </text>
+            <text id="VC" opacity="0.201958955" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="72" font-weight="bold" fill="#000000">
+                <tspan x="526" y="224.5">VC</tspan>
+            </text>
+            <text id="1." sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="14" font-weight="bold" fill="#000000">
+                <tspan x="22" y="66">1.</tspan>
+            </text>
+            <text id="2." sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="14" font-weight="bold" fill="#000000">
+                <tspan x="251" y="148.5">2.</tspan>
+            </text>
+            <text id="3." sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="14" font-weight="bold" fill="#000000">
+                <tspan x="455" y="73.5">3.</tspan>
+            </text>
+            <path d="M138.675781,290.386719 C138.675781,290.386719 76.1835938,304.097656 58.578125,232.753906" id="Path-1" stroke="#000000" stroke-width="2" sketch:type="MSShapeGroup"></path>
+            <path id="Path-1-decoration-1" d="M64.7728482,242.971019 C62.5982734,239.82778 60.8042541,237.018875 58.8062307,233.663696 C58.7864807,237.60076 58.8835638,241.015607 59.1260982,244.999371" stroke="#000000" stroke-width="2"></path>
+            <g id="Rectangle-1-+-VM-2" sketch:type="MSLayerGroup" transform="translate(588.000000, 268.000000)">
+                <rect id="Rectangle-1" stroke="#000000" fill="#F4F4F4" sketch:type="MSShapeGroup" x="0" y="0.209302326" width="26.8361582" height="35.7906977"></rect>
+                <text id="VM" opacity="0.864738806" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="14.7272727" font-weight="bold" fill="#000000">
+                    <tspan x="1.93220339" y="14.1046512">VM</tspan>
+                </text>
+            </g>
+            <g id="Rectangle-1-+-VM-2" sketch:type="MSLayerGroup" transform="translate(599.000000, 284.000000)">
+                <rect id="Rectangle-1" stroke="#000000" fill="#F4F4F4" sketch:type="MSShapeGroup" x="0" y="1.20930233" width="26.8361582" height="35.7906977"></rect>
+                <text id="VC" opacity="0.864738806" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="14.7272727" font-weight="bold" fill="#000000">
+                    <tspan x="3.93220339" y="14.1046512">VC</tspan>
+                </text>
+            </g>
+            <g id="Rectangle-1-+-VM-2" sketch:type="MSLayerGroup" transform="translate(364.000000, 363.000000)">
+                <rect id="Rectangle-1" stroke="#000000" fill="#F5F5F5" sketch:type="MSShapeGroup" x="0" y="0.209302326" width="26.8361582" height="35.7906977"></rect>
+                <text id="VM" opacity="0.864738806" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="14.7272727" font-weight="bold" fill="#000000">
+                    <tspan x="1.93220339" y="14.1046512">VM</tspan>
+                </text>
+            </g>
+            <text id="Asks-VM-for-child-vi" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="14" font-weight="bold" fill="#000000">
+                <tspan x="116" y="263">Asks VM for child </tspan>
+                <tspan x="116" y="280">view-model</tspan>
+            </text>
+            <text id="VM-returns-child-VM" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="14" font-weight="bold" fill="#000000">
+                <tspan x="286.902344" y="351">VM returns </tspan>
+                <tspan x="286.902344" y="368">child VM</tspan>
+            </text>
+            <text id="VC-inits-new-VC-with" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="14" font-weight="bold" fill="#000000">
+                <tspan x="467" y="276">VC inits new VC </tspan>
+                <tspan x="467" y="293">with child VM</tspan>
+            </text>
+            <path d="M286.546079,309.863553 C286.546079,309.863553 373.928222,281.131333 373.928221,361.923893" id="Path-2" stroke="#000000" stroke-width="2" sketch:type="MSShapeGroup"></path>
+            <path id="Path-2-decoration-1" d="M370.317224,350.976402 C371.712197,354.52681 372.793414,357.665883 373.926957,361.39291 C374.891685,357.580677 375.601413,354.236991 376.275823,350.27277" stroke="#000000" stroke-width="2"></path>
+        </g>
+    </g>
+</svg>

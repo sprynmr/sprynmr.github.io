@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="376px" height="212px" viewBox="0 0 376 212" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch Beta 3.1.1 (8761) - http://www.bohemiancoding.com/sketch -->
+    <title>Artboard 1</title>
+    <desc>Created with Sketch Beta.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="Artboard-1" sketch:type="MSArtboardGroup">
+            <rect id="Rectangle-1" stroke="#979797" fill="#EEEEEE" sketch:type="MSShapeGroup" x="14" y="29" width="81" height="75" rx="8"></rect>
+            <rect id="Rectangle-1" stroke="#979797" fill="#EEEEEE" sketch:type="MSShapeGroup" x="14" y="108" width="81" height="75" rx="8"></rect>
+            <rect id="Rectangle-1" stroke="#979797" fill="#EEEEEE" sketch:type="MSShapeGroup" x="100" y="29" width="193" height="75" rx="8"></rect>
+            <rect id="Rectangle-1" stroke="#979797" fill="#EEEEEE" sketch:type="MSShapeGroup" x="297" y="29" width="64" height="75" rx="8"></rect>
+            <rect id="Rectangle-1" stroke="#979797" fill="#EEEEEE" sketch:type="MSShapeGroup" x="100" y="108" width="131" height="75" rx="8"></rect>
+            <rect id="Rectangle-1" stroke="#979797" fill="#EEEEEE" sketch:type="MSShapeGroup" x="236" y="108" width="125" height="75" rx="8"></rect>
+            <text id="M" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="81" font-weight="normal" fill="#545454">
+                <tspan x="19" y="98">M</tspan>
+            </text>
+            <text id="M" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="81" font-weight="normal" fill="#545454">
+                <tspan x="19" y="175">M</tspan>
+            </text>
+            <text id="C" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="81" font-weight="normal" fill="#545454">
+                <tspan x="168" y="98">C</tspan>
+            </text>
+            <text id="V" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="81" font-weight="normal" fill="#545454">
+                <tspan x="304" y="98">V</tspan>
+            </text>
+            <text id="VM" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="81" font-weight="normal" fill="#545454">
+                <tspan x="108" y="175">VM</tspan>
+            </text>
+            <text id="V" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="81" font-weight="normal" fill="#545454">
+                <tspan x="272" y="175">V</tspan>
+            </text>
+            <text id="Model" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="12" font-weight="normal" fill="#545454">
+                <tspan x="38" y="22">Model</tspan>
+            </text>
+            <text id="Model" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="12" font-weight="normal" fill="#545454">
+                <tspan x="157" y="22">View Controller</tspan>
+            </text>
+            <text id="Model" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="12" font-weight="normal" fill="#545454">
+                <tspan x="38" y="198">Model</tspan>
+            </text>
+            <text id="View" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="12" font-weight="normal" fill="#545454">
+                <tspan x="317" y="22">View</tspan>
+            </text>
+            <text id="View" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="12" font-weight="normal" fill="#545454">
+                <tspan x="282" y="198">View</tspan>
+            </text>
+            <text id="View-Model" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="12" font-weight="normal" fill="#545454">
+                <tspan x="136" y="198">View-Model</tspan>
+            </text>
+        </g>
+    </g>
+</svg>

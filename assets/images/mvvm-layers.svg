@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="800px" height="223px" viewBox="0 0 800 223" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.1.1 (8761) - http://www.bohemiancoding.com/sketch -->
+    <title>Artboard 1</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="Artboard-1" sketch:type="MSArtboardGroup">
+            <rect id="Rectangle-1" stroke="#979797" sketch:type="MSShapeGroup" x="42" y="55" width="174.6176" height="49" rx="8"></rect>
+            <rect id="Rectangle-1" stroke="#979797" sketch:type="MSShapeGroup" x="42" y="105" width="349.2352" height="49" rx="8"></rect>
+            <rect id="Rectangle-1" stroke="#979797" sketch:type="MSShapeGroup" x="42" y="155" width="717.6176" height="49" rx="8"></rect>
+            <rect id="Rectangle-1" stroke="#979797" sketch:type="MSShapeGroup" x="217" y="55" width="174.6176" height="49" rx="8"></rect>
+            <rect id="Rectangle-1" stroke="#979797" sketch:type="MSShapeGroup" x="392" y="55" width="367.764801" height="49" rx="8"></rect>
+            <rect id="Rectangle-1" stroke="#979797" sketch:type="MSShapeGroup" x="392" y="105" width="120.9216" height="49" rx="8"></rect>
+            <rect id="Rectangle-1" stroke="#979797" sketch:type="MSShapeGroup" x="514" y="105" width="121.9216" height="49" rx="8"></rect>
+            <rect id="Rectangle-1" stroke="#979797" sketch:type="MSShapeGroup" x="637" y="105" width="122.9216" height="49" rx="8"></rect>
+            <text id="Views" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="15" font-weight="bold" sketch:alignment="middle" fill="#000000">
+                <tspan x="108.5375" y="83">Views</tspan>
+            </text>
+            <text id="View-Controller" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="15" font-weight="bold" sketch:alignment="middle" fill="#000000">
+                <tspan x="249.295" y="83">View Controller</tspan>
+            </text>
+            <text id="UIKit" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="15" font-weight="bold" sketch:alignment="middle" fill="#000000">
+                <tspan x="198.74" y="133">UIKit</tspan>
+            </text>
+            <text id="Network" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="15" font-weight="bold" sketch:alignment="middle" fill="#000000">
+                <tspan x="422.0875" y="133">Network</tspan>
+            </text>
+            <text id="Business" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="15" font-weight="bold" sketch:alignment="middle" fill="#000000">
+                <tspan x="542.5025" y="133">Business</tspan>
+            </text>
+            <text id="Persistence" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="15" font-weight="bold" sketch:alignment="middle" fill="#000000">
+                <tspan x="655.7825" y="133">Persistence</tspan>
+            </text>
+            <text id="Foundation" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="15" font-weight="bold" sketch:alignment="middle" fill="#000000">
+                <tspan x="360.5825" y="183">Foundation</tspan>
+            </text>
+            <text id="View-Models" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="15" font-weight="bold" sketch:alignment="middle" fill="#000000">
+                <tspan x="530.245" y="83">View Models</tspan>
+            </text>
+            <text id="iOS-MVVM-Application" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="18" font-weight="bold" fill="#000000">
+                <tspan x="20" y="36">iOS MVVM Application Layer Architecture</tspan>
+            </text>
+        </g>
+    </g>
+</svg>

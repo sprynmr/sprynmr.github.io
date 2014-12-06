@@ -1,0 +1,47 @@
+ ☐ View
+   ☐ View Controller
+     ☐ Explain how the signals for the view controller chain into hiding and showing the navigation bar (chart)
+       ☐ Also Shows cancel button
+     ☐ Explain how they hook up to the view model `active` setting
+     ☐ Hook up to viewModel search string
+     ☐ Reload data
+     ☐ Show error message
+     ☐ Walk through number of rows logic
+     ☐ Walk through cell for index logic
+     ☐ willDisplayCell executes apiLoad for popular results
+     ☐ searchLoadingCell shares the viewModel
+     ☐ didSelect triggers search, detail views
+
+   ☐ TCExploreSearchLoadingCell
+     ☐ Cover the RAC logic, roughly #33-56
+ 
+
+ ☐ View Model
+   ☐ TCExploreViewModel
+     ☐ Tab change signal tracks tab property (updated via view)
+     ☐ inSearchMode Signal tracks searchString
+     ☐ becomingActiveSignal mapReplace -> YES
+     ☐ Loading Popular data
+       ☐ loading popular tags
+         ☐ Command for API call
+         ☐ popularHashtags property bound to results of command
+         ☐ Signal for when loading finishes loading
+         ☐ `wantsToLoadPopularHastagResults` either YES when the view appears, or NO once complete
+       ☐ Loading popular users exactly mirrors tags
+       ☐ We use a cool RACSignal operator that switches between signals based on another signal sending YES or NO
+         ☐ Used for generic `loadPopularResults` command
+         ☐ Used for generic BOOL `wantsToLoadPopularResults`
+     ☐ Searching
+       ☐ API Command for querying users matching search string
+         ☐ Allows concurrentExecution
+       ☐ API Command for querying tags matching search string
+       ☐ Generic searchCommand using RACSignal if operator based on tab state
+       ☐ Database search
+         ☐ Command for searching DB for users matching our search string
+         ☐ Signal to trigger search when searchString changes
+         ☐ Empty signal when search string length is 0
+         ☐ Merge those signals into one stream
+       ☐ Bind the `userSearchResults` property to the results of the DB search and the API search
+       ☐ Bind the `hashtagSearchResults` property to the results of the API call
+       ☐ Generic results using RACSignal if operator based on tab state
+     ☐ Search Cell State

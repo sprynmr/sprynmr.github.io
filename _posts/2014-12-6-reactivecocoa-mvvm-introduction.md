@@ -431,13 +431,12 @@ Next up I will examine a bit of the internals of the view-model that weren't cov
 ---
 
 [^apple-view-models]: In some of the WWDC videos this year, view-models were actually spotted in the sample code apple engineers had on screen. Not sure if any of that made it to the sample code itself.
+[^DaveLee]: Thanks to [Dave Lee](https://twitter.com/kastiglione) for exposing this as a good point to cover and for the "View Coordinator" term.
 [^exposing-models]: In practice it's sometimes pragmatic to expose models via the view-model header instead of duplicating a large amount of properties. More on that later.
 [^downloading-image]: You could expose the URL instead of the image if you are used to using a category on UIImageView for loading images from the network. That does give a more clear break between the view-model and UIKit, but I view the UIImage itself more as data, and less as the exact presentation of that data. These aren't hard and fast lines.
-[^DaveLee]: Thanks to [Dave Lee](https://twitter.com/kastiglione) for exposing this as a good point to cover and for the "View Coordinator" term.
-[^uikit-header]: This is a great principle, but there are some grey areas. For instance, you may consider a UIImage "data" and not presentation information. (I like this approach.) In this case, you will need UIKit.h so you can work with the UIImage class.
 [^andy]: I recently was fortunate enough to listen [Andy Matuschak](http://andymatuschak.org) give a talk along the lines of this concept where he makes a case for a "Thick value layer, thin object layer". The concept is similar, but focuses on how we can remove objects, and their stateful side-effecty nature, and build a more functional, testable value layer with new data structures in swift.
-[^simplification]: This is a simplified explanation for how signal chains actually work, but the basic idea is true.
+[^uikit-header]: This is a great principle, but there are some grey areas. For instance, you may consider a UIImage "data" and not presentation information. (I like this approach.) In this case, you will need UIKit.h so you can work with the UIImage class.
 [^table-data-source]: The table data source is a great example of this, as it's delegate pattern forces the use of state on the delegate to be able to provide information to the table view when requested. In fact the delegate pattern in general forces a whole lot of use of state.
-[^almost]: Our nested API block could have access to it's parent's context.
 [^defer]: I could also use the `defer` class method on `RACSignal` if I didn't want my network request to happen until there was a subscriber.
+[^simplification]: This is a simplified explanation for how signal chains actually work, but the basic idea is true.
 [^NSTimer]: NSTimer works the same way. That's no coincidence, as `bufferWithTime:` is built using an `NSTimer`.

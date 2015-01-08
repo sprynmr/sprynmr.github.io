@@ -418,7 +418,7 @@ This post may have been a little overwhelming. Don't let that scare you off. The
 
 Next up I will examine a bit of the internals of the view-model that weren't covered here, and introduce `RACCommand` (in hopefully a MUCH shorter post). Then we'll dive into a real world example of a fairly complicated screen from an app I built called [Three Cents](http://www.threecentsapp.com/) where we mix in network calls, core data, multiple UI states and more!
 
-![Three Cents Explore Screen](assets/images/ThreeCentsExplore.gif)
+![Three Cents Explore Screen](/assets/images/ThreeCentsExplore.gif)
 
 ###Further reading:
 

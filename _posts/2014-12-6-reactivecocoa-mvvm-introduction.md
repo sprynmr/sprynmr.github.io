@@ -30,7 +30,7 @@ I'm not going to cover the history of MVC/MVVM as it's been covered elsewhere, a
 3. **View-Model** – The term itself can lead to confusion, as it's a mashup of two terms we already know, but it's something entirely different. It's not a model in the traditional data-model structure sense (which again, is just my preference). One of its responsibilities *is* that of a static model representing the data necessary for the view to display itself; but it's also responsible for gathering, interpreting, and transforming that data. This leaves the view (controller) with a more clearly defined task of presenting the data supplied by the view-model.
 
 ### More about the view-model
-The term **view-model** really is quite poor for our purposes. A better term might be **"View Coordinator"**.[^DaveLee] You can think of it almost like the team of researchers and writers behind a news anchor on tv. It gathers the raw data from the necessary sources (database, web service calls, etc), applies logic, and massages that data into presentation data for the view (controller). It exposes (usually via properties) only the information the view controller needs to know about to do it's job of displaying the view (ideally you are not exposing your data-model objects). It's also responsible for making changes to the data upstream (e.g. updating models/database, API POST calls).
+The term **view-model** really is quite poor for our purposes. A better term might be **"View Coordinator"**.[^DaveLee] You can think of it almost like the team of researchers and writers behind a news anchor on tv. It gathers the raw data from the necessary sources (database, web service calls, etc), applies logic, and massages that data into presentation data for the view (controller). It exposes (usually via properties) only the information the view controller needs to know about to do its job of displaying the view (ideally you are not exposing your data-model objects). It's also responsible for making changes to the data upstream (e.g. updating models/database, API POST calls).
 
 
 ## MVVM in a MVC world
@@ -59,7 +59,7 @@ What we really end up with is **MVMCV**. **M**odel **V**iew-**M**odel **C**ontro
 
 Now the view controller's only concerns are configuring and managing the various views with data from the view-model, and letting the view-model know when relevant user input occurs that needs to change data upstream. The view controller doesn't need to know about web service calls, Core Data, model objects[^exposing-models], etc.
 
-The view-model will live as a property on the view controller. The view controller knows about the view-model and it's public properties, but the view-model knows nothing about the view controller. You should already feel better about this design as we have better separation of concerns going on here.
+The view-model will live as a property on the view controller. The view controller knows about the view-model and its public properties, but the view-model knows nothing about the view controller. You should already feel better about this design as we have better separation of concerns going on here.
 
 Another way to help you understand how our components fit together, and where the responsibilities fall, is to look at a layer diagram of our new application building blocks.
 
@@ -151,7 +151,7 @@ and use it like this in our primary view controller:
 
 {% gist sprynmr/194ab0c97500592c3954 %}
 
-In this example I want to present a profile view controller of our current user, but my profile view controller needs a view-model. My main view controller here doesn't know all of the necessary data about this user to build the associated view-model (nor should it), so it asks it's own view-model to do the dirty work for it of creating the new view-model.
+In this example I want to present a profile view controller of our current user, but my profile view controller needs a view-model. My main view controller here doesn't know all of the necessary data about this user to build the associated view-model (nor should it), so it asks its own view-model to do the dirty work for it of creating the new view-model.
 
 #### Lists of view-models
 
@@ -165,7 +165,7 @@ This view-model approach to application design is a stepping stone on the path t
 
 The view-model is the ["functional core"](http://www.smashingmagazine.com/2014/07/02/dont-be-scared-of-functional-programming/), though pragmatically in iOS/Objective-C it's tricky to get to the purely functional level (Swift provides some additional functionality that will get us closer). The general idea is to make your view-models have as little dependence and impact on the rest of the "application world" as possible. What does that mean? Think of simple functions you probably learned when first studying programming. They accepted maybe one or two parameters, and output a result value. **Data in, data out.** Maybe the function did some math, or combined a first and last name. No matter what else was going on in the application, the same input would create the same output. That's the functional aspect.
 
-That's what we are striving for with view-models. They contain the logic and functionality for transforming data and storing it's output in properties. Ideally the same input (e.g. web service response) will derive the same output (property values). This means eliminating as many factors as possible by which the rest of the "application world" might affect the output, [such as using a lot of state](http://www.sprynthesis.com/2014/06/15/why-reactivecocoa/). **A great first step would be not including UIKit.h in your view-model header.**[^uikit-header] UIKit is, by it's nature, going to affect a lot of the application world. It contains many "side-effects", whereby changing one value or calling one method will trigger many indirect (even unknowable) changes.
+That's what we are striving for with view-models. They contain the logic and functionality for transforming data and storing its output in properties. Ideally the same input (e.g. web service response) will derive the same output (property values). This means eliminating as many factors as possible by which the rest of the "application world" might affect the output, [such as using a lot of state](http://www.sprynthesis.com/2014/06/15/why-reactivecocoa/). **A great first step would be not including UIKit.h in your view-model header.**[^uikit-header] UIKit is, by its nature, going to affect a lot of the application world. It contains many "side-effects", whereby changing one value or calling one method will trigger many indirect (even unknowable) changes.
 
 **Update:** Just watched Andy do another fabulous talk at the [Functional Swift Conference](http://2014.funswiftconf.com) and thought about this a little more. Understand that your view-model is *still* an object, and does need to maintain some state (otherwise it wouldn't be a terribly useful model for your view.) But you still should strive to move as much logic as possible into stateless functions "values". Again, swift makes this much more feasible than Objective-C.
 
@@ -243,7 +243,7 @@ This may look like an old school CS diagram for documenting the flow of our appl
 
 ![A signal doing nothing](/assets/images/signal-no-subscribers.svg)
 
-A signal is an object that sends out a stream of values. But our signal here isn't doing anything. That's because it doesn't have any subscribers. A signal will only send out information if it has a subscriber listening (er, subscribed) to it. It will send that subscriber zero or more "next" events containing the value, followed by either a "complete" event or an "error" event. (A signal is similar to a "promise" in some other languages/toolkits, but far more powerful as it isn't limited to only sending a return value once to it's subscribers.)
+A signal is an object that sends out a stream of values. But our signal here isn't doing anything. That's because it doesn't have any subscribers. A signal will only send out information if it has a subscriber listening (er, subscribed) to it. It will send that subscriber zero or more "next" events containing the value, followed by either a "complete" event or an "error" event. (A signal is similar to a "promise" in some other languages/toolkits, but far more powerful as it isn't limited to only sending a return value once to its subscribers.)
 
 ![A signal with a subscriber](/assets/images/signal-with-subscriber.svg)
 
@@ -261,7 +261,7 @@ Here I'm creating a signal using a (fake) network operation that has success and
 
 Luckily, the creators of RAC actually use their own library to build real things (fathom that), so they have a strong idea what's needed in our daily work. They have provided us with a wealth of mechanisms to pull signals off of the existing asynchronous patterns we commonly use. Just don't forget that if you have an asynchronous task that isn't covered with some built in signal, you can *easily* create it with `createSignal:`, and similar methods.
 
-One such provided mechanism is the `RACObserve()` macro. (If you don't like macros, you can easily look under the hood and use the slightly more verbose representation. It's still great. There are solutions for [using the RAC library with swift](http://www.scottlogic.com/blog/2014/07/24/mvvm-reactivecocoa-swift.html) too, until we get it's [swifty replacement](https://github.com/ReactiveCocoa/ReactiveCocoa/pull/1382).) This macro is the RAC replacement for the woeful KVO APIs. You just pass in the object and keypath of the property you want to observe on that object. Given those parameters, `RACObserve` generates a signal that immediately sends the current value of that property (once it gets a subscriber), and any further changes to that property.
+One such provided mechanism is the `RACObserve()` macro. (If you don't like macros, you can easily look under the hood and use the slightly more verbose representation. It's still great. There are solutions for [using the RAC library with swift](http://www.scottlogic.com/blog/2014/07/24/mvvm-reactivecocoa-swift.html) too, until we get its [swifty replacement](https://github.com/ReactiveCocoa/ReactiveCocoa/pull/1382).) This macro is the RAC replacement for the woeful KVO APIs. You just pass in the object and keypath of the property you want to observe on that object. Given those parameters, `RACObserve` generates a signal that immediately sends the current value of that property (once it gets a subscriber), and any further changes to that property.
 
 {% highlight objective-c %}
     RACSignal *usernameValidSignal = RACObserve(self.viewModel, usernameIsValid);
@@ -277,7 +277,7 @@ Remember you can easily create your own signals as well, including [replacing ot
 
 #### What is a subscriber?
 
-Simply put, a subscriber is the bit of code that is waiting for the signal to send along it's values so it can do something with them. (It can also act on the "complete" and "error" events too).
+Simply put, a subscriber is the bit of code that is waiting for the signal to send along its values so it can do something with them. (It can also act on the "complete" and "error" events too).
 
 Here is a simple subscriber, created by passing a block to the `subscribeNext` instance method on a signal. Here we are observing the current value of a property on an object via the signal created with the `RACObserve()` macro, and assigning it to an internal property.
 
@@ -410,7 +410,7 @@ This should be fairly straightforward now, aside from one thing I want to point 
 
 #### BONUS - Eliminating even more state
 
-In some cases you can eliminate even more state on your view-model by exposing `RACSignal`s instead of properties like strings and images. Then your view controller wouldn't have to create it's own with `RACObserve`, and could just leverage those signals straightaway. Be aware that if your signal sends a value before you have subscribed/bound it in your UI, that you won't receive that "initial" value.
+In some cases you can eliminate even more state on your view-model by exposing `RACSignal`s instead of properties like strings and images. Then your view controller wouldn't have to create its own with `RACObserve`, and could just leverage those signals straightaway. Be aware that if your signal sends a value before you have subscribed/bound it in your UI, that you won't receive that "initial" value.
 
 ##Conclusion
 
@@ -438,7 +438,7 @@ Next up I will examine a bit of the internals of the view-model that weren't cov
 [^downloading-image]: You could expose the URL instead of the image if you are used to using a category on UIImageView for loading images from the network. That does give a more clear break between the view-model and UIKit, but I view the UIImage itself more as data, and less as the exact presentation of that data. These aren't hard and fast lines.
 [^andy]: I recently was fortunate enough to listen [Andy Matuschak](http://andymatuschak.org) give a talk along the lines of this concept where he makes a case for a "Thick value layer, thin object layer". The concept is similar, but focuses on how we can remove objects, and their stateful side-effecty nature, and build a more functional, testable value layer with new data structures in swift.
 [^uikit-header]: This is a great principle, but there are some grey areas. For instance, you may consider a UIImage "data" and not presentation information. (I like this approach.) In this case, you will need UIKit.h so you can work with the UIImage class.
-[^table-data-source]: The table data source is a great example of this, as it's delegate pattern forces the use of state on the delegate to be able to provide information to the table view when requested. In fact the delegate pattern in general forces a whole lot of use of state.
+[^table-data-source]: The table data source is a great example of this, as its delegate pattern forces the use of state on the delegate to be able to provide information to the table view when requested. In fact the delegate pattern in general forces a whole lot of use of state.
 [^defer]: I could also use the `defer` class method on `RACSignal` if I didn't want my network request to happen until there was a subscriber.
 [^simplification]: This is a simplified explanation for how signal chains actually work, but the basic idea is true.
 [^NSTimer]: NSTimer works the same way. That's no coincidence, as `bufferWithTime:` is built using an `NSTimer`.
